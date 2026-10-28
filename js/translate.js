@@ -7,7 +7,6 @@
       moments: 'Moments',
       vault: 'Vault',
       hearthCraft: 'HearthCraft',
-      hearthActive: 'Hearth Active',
       cmdK: 'Cmd K',
       selectLanguage: 'Select Language',
       languageSwitched: 'Language switched to English',
@@ -68,7 +67,6 @@
       moments: 'اللحظات',
       vault: 'الخزينة',
       hearthCraft: 'هيرث كرافت',
-      hearthActive: 'الموقد نشط',
       cmdK: 'بحث K',
       selectLanguage: 'اختر اللغة',
       languageSwitched: 'تم تغيير اللغة إلى العربية',
@@ -129,7 +127,6 @@
       moments: 'Momentos',
       vault: 'Bóveda',
       hearthCraft: 'HearthCraft',
-      hearthActive: 'Hogar Activo',
       cmdK: 'Comando K',
       selectLanguage: 'Seleccionar idioma',
       languageSwitched: 'Idioma cambiado a Español',
@@ -190,7 +187,6 @@
       moments: 'Moments',
       vault: 'Coffre',
       hearthCraft: 'HearthCraft',
-      hearthActive: 'Foyer Actif',
       cmdK: 'Cmd K',
       selectLanguage: 'Choisir la langue',
       languageSwitched: 'Langue changée en Français',
@@ -251,7 +247,6 @@
       moments: 'Momente',
       vault: 'Tresor',
       hearthCraft: 'HearthCraft',
-      hearthActive: 'Herd Aktiv',
       cmdK: 'Cmd K',
       selectLanguage: 'Sprache auswählen',
       languageSwitched: 'Sprache geändert zu Deutsch',
@@ -312,7 +307,6 @@
       moments: 'モーメント',
       vault: '保管庫',
       hearthCraft: 'ハースクラフト',
-      hearthActive: '炉心稼働中',
       cmdK: 'Cmd K',
       selectLanguage: '言語を選択',
       languageSwitched: '言語を日本語に変更しました',
@@ -373,7 +367,6 @@
       moments: 'मोमेंट्स',
       vault: 'वॉल्ट',
       hearthCraft: 'हार्थक्राफ्ट',
-      hearthActive: 'चूल्हा सक्रिय',
       cmdK: 'खोज Cmd K',
       selectLanguage: 'भाषा चुनें',
       languageSwitched: 'भाषा हिन्दी में बदल दी गई है',
@@ -434,7 +427,6 @@
       moments: '时刻',
       vault: '保险库',
       hearthCraft: '炉火方块',
-      hearthActive: '炉火活跃',
       cmdK: '指令 K',
       selectLanguage: '选择语言',
       languageSwitched: '语言已切换为中文',
@@ -527,11 +519,6 @@
 
     const navTetris = document.querySelector('.nav-item[data-view="tetris"]');
     if (navTetris) navTetris.textContent = dict.hearthCraft;
-
-    const brandBadge = document.querySelector('.brand-badge');
-    if (brandBadge) {
-      brandBadge.innerHTML = '<span class="pulse-dot"></span>' + dict.hearthActive;
-    }
 
     const cmdKBtn = document.querySelector('#search-trigger-btn span:last-child');
     if (cmdKBtn) {
@@ -642,36 +629,36 @@
     const translateBtn = document.getElementById('translate-btn');
     const translateMenu = document.getElementById('translate-menu');
 
-    if (translateBtn && translateMenu) {
-      translateBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        const isOpen = translateMenu.classList.contains('open');
-        translateMenu.classList.toggle('open', !isOpen);
-        translateBtn.setAttribute('aria-expanded', !isOpen ? 'true' : 'false');
-      });
+    if (!translateBtn || !translateMenu) return;
 
-      document.addEventListener('click', function(e) {
-        if (!translateMenu.contains(e.target) && e.target !== translateBtn && !translateBtn.contains(e.target)) {
-          translateMenu.classList.remove('open');
-          translateBtn.setAttribute('aria-expanded', 'false');
-        }
-      });
-    }
+    translateBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const isOpen = translateMenu.classList.contains('open');
+      translateMenu.classList.toggle('open', !isOpen);
+      translateBtn.setAttribute('aria-expanded', !isOpen ? 'true' : 'false');
+    });
 
-    document.querySelectorAll('.lang-option').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        const lang = btn.getAttribute('data-lang');
+    translateMenu.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const btn = e.target.closest('.lang-option');
+      if (!btn) return;
+      const lang = btn.getAttribute('data-lang');
+      if (lang && dictionary[lang]) {
         applyLanguage(lang);
-        if (translateMenu) {
-          translateMenu.classList.remove('open');
-        }
-        if (translateBtn) {
-          translateBtn.setAttribute('aria-expanded', 'false');
-        }
+        translateMenu.classList.remove('open');
+        translateBtn.setAttribute('aria-expanded', 'false');
         if (window.showToast) {
           window.showToast(dictionary[lang].languageSwitched, 'translate');
         }
-      });
+      }
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!translateMenu.contains(e.target) && e.target !== translateBtn && !translateBtn.contains(e.target)) {
+        translateMenu.classList.remove('open');
+        translateBtn.setAttribute('aria-expanded', 'false');
+      }
     });
 
     applyLanguage(currentLang);
