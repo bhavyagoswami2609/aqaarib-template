@@ -236,6 +236,7 @@
       { title: 'Explore Temporal Moments', hint: 'Wave Timeline & Map', icon: 'auto_stories', action: function() { switchView('moments'); } },
       { title: 'Open Cypher Vault', hint: 'Encryption & Archive', icon: 'shield_locked', action: function() { switchView('vault'); } },
       { title: 'Return to Hearth Home', hint: 'Home Landing', icon: 'home', action: function() { switchView('home'); } },
+      { title: 'Change Language / ترجمة اللغة', hint: 'Translate UI', icon: 'translate', action: function() { document.getElementById('translate-btn')?.click(); } },
       { title: 'View User Account & Hearth Roster', hint: 'Family presence details', icon: 'person', action: function() { document.getElementById('profile-avatar-btn')?.click(); } },
       { title: 'Toggle Theme Appearance', hint: 'Light / Dark mode', icon: 'palette', action: function() { document.getElementById('theme-toggle-btn')?.click(); } },
       { title: 'Send Hearth Broadcast Ping', hint: 'Notify all members', icon: 'notifications_active', action: function() { showToast('Gentle hearth chime broadcasted', 'done_all'); } }

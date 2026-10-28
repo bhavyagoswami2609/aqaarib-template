@@ -38,6 +38,10 @@
           <span class="material-symbols-outlined" style="font-size: 16px;" aria-hidden="true">search</span>
           <span>Cmd K</span>
         </button>
+                <button class="icon-btn translate-trigger-btn" id="translate-btn" type="button" title="Translate Language" aria-label="Translate Language" aria-haspopup="true" aria-expanded="false">
+          <img class="translate-icon light-icon" src="Aqaarib Favicons/translate_lightmode.png" alt="Translate"/>
+          <img class="translate-icon dark-icon" src="Aqaarib Favicons/translate_darkmode.png" alt="Translate"/>
+        </button>
         <button class="icon-btn" id="theme-toggle-btn" type="button" title="Toggle Appearance" aria-label="Toggle light or dark appearance">
           <span class="material-symbols-outlined" aria-hidden="true">bedtime</span>
         </button>
@@ -48,6 +52,78 @@
         </div>
       </div>
     </div>
+        <div class="translate-menu" id="translate-menu" role="menu" aria-label="Select Language">
+        <div class="translate-menu-header">
+          <span class="material-symbols-outlined" style="font-size: 16px;">translate</span>
+          <span data-i18n="selectLanguage">Select Language</span>
+        </div>
+        <div class="translate-lang-list">
+          <button class="lang-option active" data-lang="en" type="button" role="menuitem">
+            <span class="lang-badge">EN</span>
+            <div class="lang-info">
+              <span class="lang-name">English</span>
+              <span class="lang-sub">English (Default)</span>
+            </div>
+            <span class="material-symbols-outlined lang-check">check</span>
+          </button>
+          <button class="lang-option" data-lang="ar" type="button" role="menuitem">
+            <span class="lang-badge">AR</span>
+            <div class="lang-info">
+              <span class="lang-name">العربية</span>
+              <span class="lang-sub">Arabic</span>
+            </div>
+            <span class="material-symbols-outlined lang-check">check</span>
+          </button>
+          <button class="lang-option" data-lang="es" type="button" role="menuitem">
+            <span class="lang-badge">ES</span>
+            <div class="lang-info">
+              <span class="lang-name">Español</span>
+              <span class="lang-sub">Spanish</span>
+            </div>
+            <span class="material-symbols-outlined lang-check">check</span>
+          </button>
+          <button class="lang-option" data-lang="fr" type="button" role="menuitem">
+            <span class="lang-badge">FR</span>
+            <div class="lang-info">
+              <span class="lang-name">Français</span>
+              <span class="lang-sub">French</span>
+            </div>
+            <span class="material-symbols-outlined lang-check">check</span>
+          </button>
+          <button class="lang-option" data-lang="de" type="button" role="menuitem">
+            <span class="lang-badge">DE</span>
+            <div class="lang-info">
+              <span class="lang-name">Deutsch</span>
+              <span class="lang-sub">German</span>
+            </div>
+            <span class="material-symbols-outlined lang-check">check</span>
+          </button>
+          <button class="lang-option" data-lang="ja" type="button" role="menuitem">
+            <span class="lang-badge">JA</span>
+            <div class="lang-info">
+              <span class="lang-name">日本語</span>
+              <span class="lang-sub">Japanese</span>
+            </div>
+            <span class="material-symbols-outlined lang-check">check</span>
+          </button>
+          <button class="lang-option" data-lang="hi" type="button" role="menuitem">
+            <span class="lang-badge">HI</span>
+            <div class="lang-info">
+              <span class="lang-name">हिन्दी</span>
+              <span class="lang-sub">Hindi</span>
+            </div>
+            <span class="material-symbols-outlined lang-check">check</span>
+          </button>
+          <button class="lang-option" data-lang="zh" type="button" role="menuitem">
+            <span class="lang-badge">ZH</span>
+            <div class="lang-info">
+              <span class="lang-name">中文</span>
+              <span class="lang-sub">Chinese</span>
+            </div>
+            <span class="material-symbols-outlined lang-check">check</span>
+          </button>
+        </div>
+      </div>
   </header>
 
   <main class="main-content">
@@ -1067,5 +1143,6 @@
   <script src="js/rhythm.js"></script>
   <script src="js/moments.js"></script>
   <script src="js/vault.js"></script>
+  <script src="js/translate.js"></script>
 </body>
 </html>

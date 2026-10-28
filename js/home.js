@@ -9,7 +9,7 @@
       });
     }
 
-    const beaconBtn = document.getElementById('hero-sync-beacon-btn');
+    const beaconBtn = document.getElementById('hero-sync-beacon-btn') || document.getElementById('beacon-sync-btn');
     if (beaconBtn) {
       beaconBtn.addEventListener('click', function() {
         if (window.showToast) {
