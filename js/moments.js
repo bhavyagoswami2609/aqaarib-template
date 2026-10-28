@@ -97,6 +97,28 @@
       targetPerturbation = (clickY < height / 2 ? 80 : -80);
     });
 
+    window.triggerTimelineRipple = function(normX) {
+      if (!stage || width === 0) return;
+      const rippleX = (normX !== undefined ? normX : 0.5) * width;
+      const rippleY = height * 0.5;
+
+      if (shockwaveBox) {
+        const rip = document.createElement('div');
+        rip.className = 'shockwave-ripple';
+        const size = Math.min(width, height) * 0.5;
+        rip.style.width = size + 'px';
+        rip.style.height = size + 'px';
+        rip.style.left = rippleX + 'px';
+        rip.style.top = rippleY + 'px';
+        shockwaveBox.appendChild(rip);
+        setTimeout(function() {
+          rip.remove();
+        }, 1000);
+      }
+
+      targetPerturbation = (Math.random() > 0.5 ? 70 : -70);
+    };
+
     function buildWave(time, freq, amp, phase, baseY, influence) {
       const points = [];
       const steps = 30;
@@ -282,10 +304,50 @@
 
   function initFilterChips() {
     const chips = document.querySelectorAll('.filter-chip');
+    const pills = document.querySelectorAll('.timeline-node-pill');
+
     chips.forEach(function(chip) {
       chip.addEventListener('click', function() {
         chips.forEach(function(c) { c.classList.remove('active'); });
         chip.classList.add('active');
+
+        const filter = chip.getAttribute('data-filter') || chip.textContent.trim();
+
+        if (filter === 'all' || filter === 'All Moments') {
+          pills.forEach(function(pill) {
+            pill.classList.remove('dimmed');
+            pill.classList.remove('highlighted');
+          });
+          if (window.showToast) {
+            window.showToast('Showing all family timeline moments', 'auto_awesome_motion');
+          }
+          if (window.triggerTimelineRipple) {
+            window.triggerTimelineRipple(0.5);
+          }
+        } else {
+          let foundCount = 0;
+          let targetXNorm = 0.5;
+          pills.forEach(function(pill) {
+            const pillYear = pill.getAttribute('data-year');
+            if (pillYear === filter) {
+              pill.classList.remove('dimmed');
+              pill.classList.add('highlighted');
+              foundCount++;
+              const leftPct = parseFloat(pill.style.left) || 50;
+              targetXNorm = leftPct / 100;
+            } else {
+              pill.classList.remove('highlighted');
+              pill.classList.add('dimmed');
+            }
+          });
+
+          if (window.showToast) {
+            window.showToast('Filtered timeline to ' + filter + ' moments (' + foundCount + ' active)', 'filter_alt');
+          }
+          if (window.triggerTimelineRipple) {
+            window.triggerTimelineRipple(targetXNorm);
+          }
+        }
       });
     });
   }

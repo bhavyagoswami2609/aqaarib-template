@@ -11,16 +11,64 @@
     if (!coreBtn) return;
 
     let isArmored = true;
-    let burstTimer = null;
+    let angleOuter = 0;
+    let angleMid = 0;
+    let angleOrbit = 0;
+
+    const baseSpeedOuter = 0.28;
+    const baseSpeedMid = -0.42;
+    const baseSpeedOrbit = 0.32;
+
+    let speedOuter = baseSpeedOuter;
+    let speedMid = baseSpeedMid;
+    let speedOrbit = baseSpeedOrbit;
+
+    const orbitChips = orbitRing ? orbitRing.querySelectorAll('.animate-orbit-counter') : [];
+
+    if (ringOuter) ringOuter.style.animation = 'none';
+    if (ringMid) ringMid.style.animation = 'none';
+    if (orbitRing) orbitRing.style.animation = 'none';
+    orbitChips.forEach(function(chip) {
+      chip.style.animation = 'none';
+    });
+
+    let lastTime = performance.now();
+
+    function stepRings(now) {
+      const delta = Math.min((now - lastTime) / 16.67, 2.5);
+      lastTime = now;
+
+      angleOuter = (angleOuter + speedOuter * delta) % 360;
+      angleMid = (angleMid + speedMid * delta) % 360;
+      angleOrbit = (angleOrbit + speedOrbit * delta) % 360;
+
+      if (ringOuter) ringOuter.style.transform = 'rotate(' + angleOuter + 'deg)';
+      if (ringMid) ringMid.style.transform = 'rotate(' + angleMid + 'deg)';
+      if (orbitRing) orbitRing.style.transform = 'rotate(' + angleOrbit + 'deg)';
+
+      for (let i = 0; i < orbitChips.length; i++) {
+        orbitChips[i].style.transform = 'rotate(' + (-angleOrbit) + 'deg)';
+      }
+
+      speedOuter += (baseSpeedOuter - speedOuter) * 0.035 * delta;
+      speedMid += (baseSpeedMid - speedMid) * 0.035 * delta;
+      speedOrbit += (baseSpeedOrbit - speedOrbit) * 0.035 * delta;
+
+      requestAnimationFrame(stepRings);
+    }
+    requestAnimationFrame(stepRings);
 
     coreBtn.addEventListener('click', function() {
       isArmored = !isArmored;
 
-      if (ringOuter) ringOuter.classList.add('turbo-spin');
-      if (ringMid) ringMid.classList.add('turbo-spin');
-      if (orbitRing) orbitRing.classList.add('turbo-spin');
+      speedOuter = 5.2;
+      speedMid = -6.8;
+      speedOrbit = 4.8;
 
       coreBtn.style.transform = 'scale(1.06)';
+      setTimeout(function() {
+        coreBtn.style.transform = '';
+      }, 280);
 
       if (isArmored) {
         if (lockIcon) lockIcon.textContent = 'shield_locked';
@@ -39,14 +87,6 @@
         }
         if (window.showToast) window.showToast('Cypher Key 44 Decrypted for Hearth Cluster', 'vpn_key');
       }
-
-      clearTimeout(burstTimer);
-      burstTimer = setTimeout(function() {
-        if (ringOuter) ringOuter.classList.remove('turbo-spin');
-        if (ringMid) ringMid.classList.remove('turbo-spin');
-        if (orbitRing) orbitRing.classList.remove('turbo-spin');
-        coreBtn.style.transform = '';
-      }, 1200);
     });
   }
 

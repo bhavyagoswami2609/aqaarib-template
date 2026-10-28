@@ -81,34 +81,11 @@
   transform-origin: center center;
 }
 
-.animate-spin-slow-cw {
-  animation: spinCw 36s linear infinite;
-}
-
-.animate-spin-slow-ccw {
-  animation: spinCcw 24s linear infinite;
-}
-
-.animate-orbit-ring {
-  animation: spinCw 30s linear infinite;
-}
-
+.animate-spin-slow-cw,
+.animate-spin-slow-ccw,
+.animate-orbit-ring,
 .animate-orbit-counter {
-  animation: spinCcw 30s linear infinite;
-}
-
-.turbo-spin {
-  animation-duration: 3s !important;
-}
-
-@keyframes spinCw {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes spinCcw {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(-360deg); }
+  will-change: transform;
 }
 
 .orbit-node-chip-a {

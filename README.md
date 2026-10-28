@@ -8,7 +8,7 @@ A tactile domestic hearth synthesizing shared household coordination, living mem
 - **Hub**: Living memos with autonomous collision physics and drag-and-drop, automated 3D polaroid deck shuffle, and household chore rosters persisted in local storage.
 - **Rhythm**: 2D upright solar arc orbit simulation with dynamic z-index depth, direction reversal on click, pairwise collision bounce with contact sparks, and pantry grocery checklist.
 - **Moments**: Undulating harmonic wave timeline reacting to mouse perturbation, oral history audio recording player, free quote API, and interactive memory cartography map.
-- **Vault**: Procedural concentric cypher shield lock with continuous rotation and burst acceleration (turbo-spin), zero-knowledge mesh monitoring, and encrypted document archive.
+- **Vault**: Procedural concentric cypher shield lock with continuous rotation and smooth burst acceleration and deceleration, zero-knowledge mesh monitoring, and encrypted document archive.
 - **Appearance**: Seamless Light (Alabaster) and Dark (Obsidian) theme toggle with automatic system theme synchronization.
 
 ## Tech Stack
