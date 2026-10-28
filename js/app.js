@@ -1,6 +1,6 @@
 (function() {
-  const views = ['hero', 'hub', 'rhythm', 'moments', 'vault'];
-  let currentView = 'hero';
+  const views = ['home', 'hub', 'rhythm', 'moments', 'vault'];
+  let currentView = 'home';
 
   function initTheme() {
     const savedTheme = localStorage.getItem('aqaarib_theme');
@@ -56,20 +56,22 @@
   }
 
   function switchView(viewName) {
-    if (!views.includes(viewName)) viewName = 'hero';
+    if (viewName === 'hero') viewName = 'home';
+    if (!views.includes(viewName)) viewName = 'home';
     currentView = viewName;
 
     document.querySelectorAll('.view-section').forEach(function(sec) {
       sec.classList.remove('active');
     });
 
-    const activeSec = document.getElementById('view-' + viewName);
+    const activeSec = document.getElementById('view-' + viewName) || (viewName === 'home' ? document.getElementById('view-hero') : null);
     if (activeSec) {
       activeSec.classList.add('active');
     }
 
     document.querySelectorAll('.nav-item').forEach(function(item) {
-      if (item.getAttribute('data-view') === viewName) {
+      const v = item.getAttribute('data-view');
+      if (v === viewName || (viewName === 'home' && v === 'hero')) {
         item.classList.add('active');
       } else {
         item.classList.remove('active');
@@ -108,7 +110,7 @@
     const brandEl = document.getElementById('brand-home-btn');
     if (brandEl) {
       brandEl.addEventListener('click', function() {
-        switchView('hero');
+        switchView('home');
       });
     }
 
@@ -127,11 +129,12 @@
     });
 
     window.addEventListener('popstate', function() {
-      const hash = window.location.hash.replace('#', '');
+      let hash = window.location.hash.replace('#', '');
+      if (hash === 'hero') hash = 'home';
       if (views.includes(hash)) {
         switchView(hash);
       } else {
-        switchView('hero');
+        switchView('home');
       }
     });
 
@@ -142,15 +145,16 @@
     });
 
     const activeSec = document.querySelector('.view-section.active');
-    const defaultFromDom = activeSec ? activeSec.id.replace('view-', '') : 'hero';
+    const defaultFromDom = activeSec ? activeSec.id.replace('view-', '') : 'home';
 
-    const initialHash = window.location.hash.replace('#', '');
+    let initialHash = window.location.hash.replace('#', '');
+    if (initialHash === 'hero') initialHash = 'home';
     if (views.includes(initialHash)) {
       switchView(initialHash);
     } else if (initialFromPath) {
       switchView(initialFromPath);
     } else {
-      switchView(defaultFromDom);
+      switchView(defaultFromDom === 'hero' ? 'home' : defaultFromDom);
     }
   }
 
@@ -231,7 +235,7 @@
       { title: 'View Solar Arc Rhythms', hint: 'Cadence & Orbit', icon: 'all_inclusive', action: function() { switchView('rhythm'); } },
       { title: 'Explore Temporal Moments', hint: 'Wave Timeline & Map', icon: 'auto_stories', action: function() { switchView('moments'); } },
       { title: 'Open Cypher Vault', hint: 'Encryption & Archive', icon: 'shield_locked', action: function() { switchView('vault'); } },
-      { title: 'Return to Hearth Hero', hint: 'Home Landing', icon: 'home', action: function() { switchView('hero'); } },
+      { title: 'Return to Hearth Home', hint: 'Home Landing', icon: 'home', action: function() { switchView('home'); } },
       { title: 'View User Account & Hearth Roster', hint: 'Family presence details', icon: 'person', action: function() { document.getElementById('profile-avatar-btn')?.click(); } },
       { title: 'Toggle Theme Appearance', hint: 'Light / Dark mode', icon: 'palette', action: function() { document.getElementById('theme-toggle-btn')?.click(); } },
       { title: 'Send Hearth Broadcast Ping', hint: 'Notify all members', icon: 'notifications_active', action: function() { showToast('Gentle hearth chime broadcasted', 'done_all'); } }

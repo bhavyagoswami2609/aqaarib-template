@@ -31,7 +31,7 @@
 
   document.addEventListener('DOMContentLoaded', initHero);
   window.addEventListener('viewchanged', function(e) {
-    if (e.detail.view === 'hero') {
+    if (e.detail.view === 'home' || e.detail.view === 'hero') {
       initHero();
     }
   });

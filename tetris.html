@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aqaarib - HearthCraft 3D Tetris</title>
+  <link rel="icon" type="image/png" href="Aqaarib Favicons/heart_lightmode.png" id="site-favicon"/>
+  <link rel="stylesheet" href="css/base.css"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    if (typeof THREE === 'undefined') {
+      document.write('<script src="https://unpkg.com/three@0.128.0/build/three.min.js"><\/script>');
+    }
+  </script>
+  <script>
+    if (typeof THREE === 'undefined') {
+      document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"><\/script>');
+    }
+  </script>
+  <style>
+    :root {
+      --craft-mc-font: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .game-page-wrap {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem 1.5rem 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .game-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      background: var(--surface-container);
+      border-radius: 1.25rem;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--card-shadow);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .game-banner::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #4caf50, #ffb300, #00bcd4, #f44336, #9c27b0);
+    }
+    .banner-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .biome-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.5rem 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border-color);
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .biome-icon-wrap {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary-fixed);
+      color: var(--on-primary-fixed);
+    }
+    .biome-progress-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      min-width: 180px;
+    }
+    .biome-progress-bar {
+      height: 8px;
+      background: var(--surface-dim);
+      border-radius: 9999px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+    }
+    .biome-progress-fill {
+      height: 100%;
+      width: 10%;
+      background: linear-gradient(90deg, var(--primary), var(--tertiary));
+      border-radius: 9999px;
+      transition: width 0.4s ease;
+    }
+    .biome-progress-label {
+      font-size: 0.75rem;
+      color: var(--outline);
+      display: flex;
+      justify-content: space-between;
+    }
+    .boss-bar-wrap {
+      display: none;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(30, 0, 45, 0.25);
+      padding: 0.5rem 1.25rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(156, 39, 176, 0.4);
+      animation: bossPulse 2s infinite alternate;
+    }
+    .boss-bar-wrap.active {
+      display: flex;
+    }
+    @keyframes bossPulse {
+      0% { box-shadow: 0 0 8px rgba(156, 39, 176, 0.2); }
+      100% { box-shadow: 0 0 20px rgba(156, 39, 176, 0.6); }
+    }
+    .boss-label {
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: #e08aff;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .boss-health-bar {
+      width: 200px;
+      height: 12px;
+      background: #200030;
+      border-radius: 9999px;
+      overflow: hidden;
+      border: 1px solid #ba68c8;
+      position: relative;
+    }
+    .boss-health-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #d500f9, #7b1fa2, #e040fb);
+      transition: width 0.3s ease;
+    }
+    .boss-hp-text {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .champion-selector-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--surface);
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      border: 1px solid var(--border-color);
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .champion-selector-pill:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+    }
+    .champion-mini-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--primary);
+    }
+    .game-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr 300px;
+      gap: 1.25rem;
+      align-items: start;
+    }
+    @media (max-width: 1100px) {
+      .game-layout {
+        grid-template-columns: 240px 1fr 260px;
+      }
+    }
+    @media (max-width: 900px) {
+      .game-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .game-card {
+      background: var(--surface-container);
+      border-radius: 1.25rem;
+      border: 1px solid var(--border-color);
+      padding: 1.25rem;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      position: relative;
+    }
+    .card-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--outline);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .mini-canvas-wrap {
+      background: var(--surface);
+      border-radius: 1rem;
+      border: 1px solid var(--border-subtle);
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .mini-canvas-wrap canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+    .champion-hero-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      background: var(--surface);
+      border-radius: 1rem;
+      padding: 1rem;
+      border: 1px solid var(--border-color);
+    }
+    .champion-info-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .champ-photo {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--primary);
+    }
+    .champ-name {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .champ-role {
+      font-size: 0.75rem;
+      color: var(--outline);
+    }
+    .champ-passive {
+      font-size: 0.8rem;
+      background: var(--surface-container);
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.6rem;
+      color: var(--on-surface-variant);
+      line-height: 1.35;
+    }
+    .beacon-gauge-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .beacon-bar-outer {
+      height: 10px;
+      background: var(--surface-dim);
+      border-radius: 9999px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+    }
+    .beacon-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ff9800, #ff5722, #ffd600);
+      border-radius: 9999px;
+      transition: width 0.3s ease;
+    }
+    .beacon-btn {
+      width: 100%;
+      padding: 0.6rem;
+      border-radius: 0.75rem;
+      border: none;
+      background: var(--surface-dim);
+      color: var(--outline);
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: not-allowed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      transition: all 0.25s ease;
+    }
+    .beacon-btn.ready {
+      background: linear-gradient(135deg, #e65100, #f57c00, #ffb300);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
+      animation: beaconReadyPulse 1.5s infinite;
+    }
+    @keyframes beaconReadyPulse {
+      0% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 152, 0, 0.4); }
+      50% { transform: scale(1.02); box-shadow: 0 0 20px rgba(255, 152, 0, 0.7); }
+      100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 152, 0, 0.4); }
+    }
+    .codex-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+    }
+    .codex-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.35rem 0.6rem;
+      border-radius: 0.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border-subtle);
+    }
+    .codex-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      display: inline-block;
+      margin-right: 0.4rem;
+      border: 1px solid rgba(0,0,0,0.2);
+    }
+    .arena-viewport-card {
+      background: var(--surface-container);
+      border-radius: 1.25rem;
+      border: 1px solid var(--border-color);
+      padding: 0.75rem;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      position: relative;
+    }
+    .viewport-canvas-wrap {
+      width: 100%;
+      height: 600px;
+      background: #0d0f12;
+      border-radius: 1rem;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    #game-canvas {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+    }
+    .floating-hud {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      right: 1rem;
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .hud-chip {
+      background: rgba(18, 17, 16, 0.85);
+      backdrop-filter: blur(8px);
+      padding: 0.4rem 0.8rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .hud-combo-alert {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.5);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 20;
+      text-align: center;
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .hud-combo-alert.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+    .combo-text-main {
+      font-size: 2.2rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #ffd700;
+      text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 2px 2px 0 #000;
+    }
+    .combo-text-sub {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+    }
+    .arena-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      padding: 0.5rem 0.25rem;
+    }
+    .camera-modes {
+      display: flex;
+      gap: 0.4rem;
+    }
+    .cam-btn {
+      padding: 0.4rem 0.75rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border-color);
+      background: var(--surface);
+      color: var(--on-surface);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all 0.2s ease;
+    }
+    .cam-btn.active {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .stat-box-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    .stat-box {
+      background: var(--surface);
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+    .stat-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--outline);
+    }
+    .stat-value {
+      font-size: 1.4rem;
+      font-weight: 800;
+      font-family: var(--font-label);
+      color: var(--on-surface);
+    }
+    .stat-value.highlight {
+      color: var(--primary);
+    }
+    .family-stream-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      max-height: 220px;
+      overflow-y: auto;
+      padding-right: 0.25rem;
+    }
+    .cheer-msg {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      background: var(--surface);
+      border-radius: 0.75rem;
+      padding: 0.6rem;
+      border: 1px solid var(--border-subtle);
+      font-size: 0.8rem;
+      animation: fadeInMsg 0.3s ease;
+    }
+    @keyframes fadeInMsg {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .cheer-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .cheer-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+    .cheer-author {
+      font-weight: 700;
+      font-size: 0.75rem;
+      color: var(--primary);
+    }
+    .cheer-body {
+      color: var(--on-surface-variant);
+      line-height: 1.3;
+    }
+    .leaderboard-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+    .leaderboard-table th {
+      text-align: left;
+      padding: 0.35rem 0.5rem;
+      color: var(--outline);
+      font-weight: 600;
+      font-size: 0.7rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .leaderboard-table td {
+      padding: 0.4rem 0.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .rank-cell {
+      font-weight: 800;
+      color: var(--primary);
+      width: 24px;
+    }
+    .mobile-controls {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    @media (min-width: 901px) {
+      .mobile-controls {
+        display: none;
+      }
+    }
+    .ctrl-btn {
+      background: var(--surface);
+      border: 1px solid var(--border-color);
+      border-radius: 0.75rem;
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.2rem;
+      color: var(--on-surface);
+      font-weight: 700;
+      font-size: 0.75rem;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .ctrl-btn:active {
+      background: var(--primary-fixed);
+      transform: scale(0.96);
+    }
+    .craft-modal-backdrop {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(18, 17, 16, 0.75);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1.5rem;
+    }
+    .craft-modal-backdrop.open {
+      display: flex;
+      animation: modalFade 0.25s ease;
+    }
+    @keyframes modalFade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .craft-modal {
+      background: var(--surface-container);
+      border-radius: 1.5rem;
+      border: 1px solid var(--border-color);
+      max-width: 480px;
+      width: 100%;
+      padding: 2rem;
+      box-shadow: var(--dock-shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      text-align: center;
+      position: relative;
+    }
+    .modal-icon-badge {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary-fixed);
+      color: var(--primary);
+    }
+    .modal-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      font-family: var(--font-serif);
+      color: var(--on-surface);
+    }
+    .modal-sub {
+      font-size: 0.9rem;
+      color: var(--on-surface-variant);
+      line-height: 1.45;
+    }
+    .modal-stats-pill {
+      background: var(--surface);
+      border-radius: 1rem;
+      padding: 1rem;
+      border: 1px solid var(--border-subtle);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      text-align: left;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+    }
+    .btn-craft-primary {
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      background: var(--primary);
+      color: var(--on-primary);
+      font-weight: 700;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+    .btn-craft-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(158, 60, 38, 0.35);
+    }
+    .btn-craft-secondary {
+      padding: 0.75rem 1.25rem;
+      border-radius: 9999px;
+      background: var(--surface);
+      color: var(--on-surface);
+      border: 1px solid var(--border-color);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-craft-secondary:hover {
+      background: var(--surface-dim);
+    }
+    .champ-picker-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      text-align: left;
+    }
+    .champ-choice-card {
+      background: var(--surface);
+      border-radius: 1rem;
+      padding: 0.85rem;
+      border: 2px solid transparent;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+    .champ-choice-card:hover {
+      border-color: var(--primary-accent);
+      transform: translateY(-2px);
+    }
+    .champ-choice-card.selected {
+      border-color: var(--primary);
+      background: var(--surface-high);
+    }
+    .icon-toggle-btn {
+      background: var(--surface);
+      border: 1px solid var(--border-color);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--on-surface);
+      transition: all 0.2s ease;
+    }
+    .icon-toggle-btn:hover {
+      background: var(--surface-dim);
+    }
+    .game-start-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(13, 15, 18, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 25;
+      padding: 1.5rem;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .game-start-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .start-card {
+      background: var(--surface-container);
+      border: 1px solid var(--border-color);
+      border-radius: 1.5rem;
+      padding: 2.25rem 2rem;
+      max-width: 440px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+    .start-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      background: var(--primary-fixed);
+      color: var(--on-primary-fixed);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .start-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .start-desc {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      line-height: 1.5;
+      margin: 0;
+    }
+    .btn-start-game {
+      font-size: 1.05rem;
+      padding: 0.85rem 2.2rem;
+      margin-top: 0.5rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      border-radius: 9999px;
+      border: none;
+      font-weight: 700;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn-start-game:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(76, 175, 80, 0.45);
+    }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="header-brand" id="brand-home-btn" role="button" tabindex="0" onclick="window.location.href='index.html#home'" aria-label="Aqaarib Family Operating Hub Home">
+        <span class="material-symbols-outlined brand-icon" aria-hidden="true">all_inclusive</span>
+        <span class="brand-text">Aqaarib</span>
+        <span class="brand-badge"><span class="pulse-dot"></span>Hearth Active</span>
+      </div>
+      <nav class="nav-pill" role="navigation" aria-label="Main Navigation">
+        <button class="nav-item" data-view="home" onclick="window.location.href='index.html#home'" type="button">Home</button>
+        <button class="nav-item" data-view="hub" onclick="window.location.href='index.html#hub'" type="button">Hub</button>
+        <button class="nav-item" data-view="rhythm" onclick="window.location.href='index.html#rhythm'" type="button">Rhythm</button>
+        <button class="nav-item" data-view="moments" onclick="window.location.href='index.html#moments'" type="button">Moments</button>
+        <button class="nav-item" data-view="vault" onclick="window.location.href='index.html#vault'" type="button">Vault</button>
+        <button class="nav-item active" data-view="tetris" type="button">HearthCraft</button>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-toggle-btn" id="sound-toggle-btn" type="button" title="Toggle Sound FX" aria-label="Toggle Sound FX">
+          <span class="material-symbols-outlined" id="sound-icon" aria-hidden="true">volume_up</span>
+        </button>
+        <button class="icon-btn" id="theme-toggle-btn" type="button" title="Toggle Appearance" aria-label="Toggle light or dark appearance">
+          <span class="material-symbols-outlined" aria-hidden="true">bedtime</span>
+        </button>
+        <div class="profile-avatar-wrap" id="profile-avatar-btn" role="button" tabindex="0" title="Hearth Roster" aria-label="Family Hearth Roster">
+          <img class="profile-avatar light-icon" src="Aqaarib Favicons/user_lightmode.png" alt="User Account"/>
+          <img class="profile-avatar dark-icon" src="Aqaarib Favicons/user_darkmode.png" alt="User Account"/>
+          <span class="profile-status"></span>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main class="main-content">
+    <div class="game-page-wrap">
+      <div class="game-banner">
+        <div class="banner-left">
+          <div class="biome-badge" id="current-biome-badge">
+            <div class="biome-icon-wrap" id="biome-icon-wrap">
+              <span class="material-symbols-outlined" style="font-size: 18px;">forest</span>
+            </div>
+            <div>
+              <div style="font-size: 0.7rem; color: var(--outline); text-transform: uppercase;">Current Biome</div>
+              <div id="biome-name-text">Plains & Forest</div>
+            </div>
+          </div>
+          <div class="biome-progress-wrap">
+            <div class="biome-progress-label">
+              <span id="biome-level-label">Biome Tier 1 of 5</span>
+              <span id="biome-pts-next">1,500 pts to Desert</span>
+            </div>
+            <div class="biome-progress-bar">
+              <div class="biome-progress-fill" id="biome-progress-fill"></div>
+            </div>
+          </div>
+        </div>
+        <div class="boss-bar-wrap" id="boss-bar-wrap">
+          <div class="boss-label">
+            <span class="material-symbols-outlined" style="font-size: 18px; color: #ff4081;">local_fire_department</span>
+            <span>JEAN THE ENDER DRAGON</span>
+          </div>
+          <div class="boss-health-bar">
+            <div class="boss-health-fill" id="boss-health-fill"></div>
+          </div>
+          <span class="boss-hp-text" id="boss-hp-text">100 / 100 HP</span>
+        </div>
+        <div class="champion-selector-pill" id="champ-pill-btn" title="Click to Switch Champion">
+          <img class="champion-mini-avatar" id="champ-mini-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBf3drIRR9u1Ao6F01u-XRF_lGNTACLK25df1Ve_v0T98_JyE8kpN0VJvJ8s2cYdmkrXKq4QMSKGbi25xiuYXqKs2k1k0AhG83WIjp7NGRYZRFDBipR6585MS1n9eI8lJGVtrDzEzc0XNTB75o7C_UdTuad5xD7bpAhigiDYASR5L3L7_zfTdfPGIpFZXq5uCOI4uDQ2sNDL-ijN3WyI6kw-IiSs-_rtye2OElnAaxp9VzOn5qJDgkH3g" alt="Tariq"/>
+          <div style="text-align: left;">
+            <div style="font-size: 0.7rem; color: var(--outline);">Champion</div>
+            <div style="font-weight: 700; font-size: 0.85rem;" id="champ-mini-name">Tariq (Architect)</div>
+          </div>
+          <span class="material-symbols-outlined" style="font-size: 16px; color: var(--outline);">swap_horiz</span>
+        </div>
+      </div>
+      <div class="game-layout">
+        <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+          <div class="game-card">
+            <div class="card-title">
+              <span class="material-symbols-outlined" style="font-size: 18px;">pan_tool</span>
+              <span>Hold Piece [C]</span>
+            </div>
+            <div class="mini-canvas-wrap">
+              <canvas id="hold-canvas"></canvas>
+            </div>
+          </div>
+          <div class="game-card">
+            <div class="card-title">
+              <span class="material-symbols-outlined" style="font-size: 18px;">family_restroom</span>
+              <span>Hearth Synergy</span>
+            </div>
+            <div class="champion-hero-card">
+              <div class="champion-info-row">
+                <img class="champ-photo" id="champ-card-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBf3drIRR9u1Ao6F01u-XRF_lGNTACLK25df1Ve_v0T98_JyE8kpN0VJvJ8s2cYdmkrXKq4QMSKGbi25xiuYXqKs2k1k0AhG83WIjp7NGRYZRFDBipR6585MS1n9eI8lJGVtrDzEzc0XNTB75o7C_UdTuad5xD7bpAhigiDYASR5L3L7_zfTdfPGIpFZXq5uCOI4uDQ2sNDL-ijN3WyI6kw-IiSs-_rtye2OElnAaxp9VzOn5qJDgkH3g" alt="Tariq"/>
+                <div>
+                  <div class="champ-name" id="champ-card-name">Tariq Al-Rashid</div>
+                  <div class="champ-role" id="champ-card-role">The Architect</div>
+                </div>
+              </div>
+              <div class="champ-passive" id="champ-card-desc">
+                <strong>Passive: Structural Foundation</strong><br/>
+                Earns +25% bonus points on all Stone, Cobble, and Obsidian blocks.
+              </div>
+            </div>
+            <div class="beacon-gauge-wrap">
+              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700;">
+                <span>Hearth Beacon Energy</span>
+                <span id="beacon-pct-text">0%</span>
+              </div>
+              <div class="beacon-bar-outer">
+                <div class="beacon-bar-fill" id="beacon-bar-fill"></div>
+              </div>
+              <button class="beacon-btn" id="activate-beacon-btn" type="button" disabled>
+                <span class="material-symbols-outlined" style="font-size: 16px;">wb_incandescent</span>
+                <span>Activate Beacon [F]</span>
+              </button>
+            </div>
+          </div>
+          <div class="game-card">
+            <div class="card-title">
+              <span class="material-symbols-outlined" style="font-size: 18px;">diamond</span>
+              <span>Block Scoring Codex</span>
+            </div>
+            <div class="codex-list">
+              <div class="codex-item">
+                <div><span class="codex-swatch" style="background: #4caf50;"></span>Dirt / Grass</div>
+                <strong>+10 pts</strong>
+              </div>
+              <div class="codex-item">
+                <div><span class="codex-swatch" style="background: #b8945f;"></span>Oak Planks</div>
+                <strong>+15 pts</strong>
+              </div>
+              <div class="codex-item">
+                <div><span class="codex-swatch" style="background: #757575;"></span>Cobblestone</div>
+                <strong>+20 pts</strong>
+              </div>
+              <div class="codex-item">
+                <div><span class="codex-swatch" style="background: #ffd700;"></span>Gold Ore</div>
+                <strong>+35 pts</strong>
+              </div>
+              <div class="codex-item">
+                <div><span class="codex-swatch" style="background: #f44336;"></span>Redstone</div>
+                <strong>+50 pts</strong>
+              </div>
+              <div class="codex-item">
+                <div><span class="codex-swatch" style="background: #00e5ff;"></span>Diamond Block</div>
+                <strong>+75 pts</strong>
+              </div>
+              <div class="codex-item">
+                <div><span class="codex-swatch" style="background: #311b92;"></span>Obsidian / Nether</div>
+                <strong>+100 pts</strong>
+              </div>
+              <div class="codex-item">
+                <div><span class="codex-swatch" style="background: #fff59d;"></span>End Stone / Purpur</div>
+                <strong>+150 pts</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="arena-viewport-card">
+          <div class="viewport-canvas-wrap" id="viewport-wrap">
+            <canvas id="game-canvas"></canvas>
+            <div class="game-start-overlay" id="game-start-overlay">
+              <div class="start-card">
+                <div class="start-badge">
+                  <span class="material-symbols-outlined">sports_esports</span>
+                  <span>HearthCraft Expedition</span>
+                </div>
+                <h2 class="start-title">HearthCraft 3D Tetris</h2>
+                <p class="start-desc">Build voxel monoliths across 5 biomes, harness family champion passives, and conquer the Ender Dragon.</p>
+                <button class="btn-craft-primary btn-start-game" id="btn-start-game" type="button">
+                  <span class="material-symbols-outlined">play_arrow</span>
+                  <span>Start Game</span>
+                </button>
+              </div>
+            </div>
+            <div class="floating-hud">
+              <div class="hud-chip">
+                <span class="material-symbols-outlined" style="font-size: 16px; color: #ffd700;">military_tech</span>
+                <span id="hud-score-counter">0</span>
+              </div>
+              <div class="hud-chip" id="hud-speed-chip">
+                <span class="material-symbols-outlined" style="font-size: 16px; color: #ff5722;">speed</span>
+                <span id="hud-speed-val">1.0x</span>
+              </div>
+            </div>
+            <div class="hud-combo-alert" id="hud-combo-alert">
+              <div class="combo-text-main" id="combo-title">TETRIS!</div>
+              <div class="combo-text-sub" id="combo-sub">+1,200 PTS • DRAGON DAMAGED!</div>
+            </div>
+          </div>
+          <div class="arena-bar">
+            <div class="camera-modes">
+              <button class="cam-btn active" id="cam-iso" type="button">
+                <span class="material-symbols-outlined" style="font-size: 15px;">view_in_ar</span>
+                <span>Isometric 3D</span>
+              </button>
+              <button class="cam-btn" id="cam-front" type="button">
+                <span class="material-symbols-outlined" style="font-size: 15px;">crop_portrait</span>
+                <span>Front View</span>
+              </button>
+              <button class="cam-btn" id="cam-cinematic" type="button">
+                <span class="material-symbols-outlined" style="font-size: 15px;">movie</span>
+                <span>Cinematic</span>
+              </button>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="btn-craft-secondary" id="pause-btn" type="button" style="padding: 0.4rem 0.85rem; font-size: 0.8rem;">
+                <span class="material-symbols-outlined" style="font-size: 16px;" id="pause-icon">pause</span>
+                <span id="pause-label">Pause</span>
+              </button>
+              <button class="btn-craft-secondary" id="restart-btn" type="button" style="padding: 0.4rem 0.85rem; font-size: 0.8rem;">
+                <span class="material-symbols-outlined" style="font-size: 16px;">refresh</span>
+                <span>Restart</span>
+              </button>
+            </div>
+          </div>
+          <div class="mobile-controls">
+            <button class="ctrl-btn" id="btn-touch-left" type="button">
+              <span class="material-symbols-outlined">arrow_back</span>
+              <span>Left</span>
+            </button>
+            <button class="ctrl-btn" id="btn-touch-rot" type="button">
+              <span class="material-symbols-outlined">rotate_right</span>
+              <span>Rotate</span>
+            </button>
+            <button class="ctrl-btn" id="btn-touch-right" type="button">
+              <span class="material-symbols-outlined">arrow_forward</span>
+              <span>Right</span>
+            </button>
+            <button class="ctrl-btn" id="btn-touch-hold" type="button">
+              <span class="material-symbols-outlined">pan_tool</span>
+              <span>Hold</span>
+            </button>
+            <button class="ctrl-btn" id="btn-touch-down" type="button" style="grid-column: span 2;">
+              <span class="material-symbols-outlined">arrow_downward</span>
+              <span>Soft Drop</span>
+            </button>
+            <button class="ctrl-btn" id="btn-touch-drop" type="button" style="grid-column: span 2; background: var(--primary-fixed);">
+              <span class="material-symbols-outlined" style="color: var(--primary);">vertical_align_bottom</span>
+              <span style="color: var(--primary);">Hard Drop</span>
+            </button>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+          <div class="game-card">
+            <div class="card-title">
+              <span class="material-symbols-outlined" style="font-size: 18px;">fast_forward</span>
+              <span>Next Piece</span>
+            </div>
+            <div class="mini-canvas-wrap">
+              <canvas id="next-canvas"></canvas>
+            </div>
+          </div>
+          <div class="stat-box-grid">
+            <div class="stat-box">
+              <span class="stat-label">Score</span>
+              <span class="stat-value highlight" id="stat-score">0</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">High Score</span>
+              <span class="stat-value" id="stat-high-score">18,400</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">Lines Cleared</span>
+              <span class="stat-value" id="stat-lines">0</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">Biome Tier</span>
+              <span class="stat-value" id="stat-level">1</span>
+            </div>
+          </div>
+          <div class="game-card">
+            <div class="card-title">
+              <span class="material-symbols-outlined" style="font-size: 18px;">forum</span>
+              <span>Family Hearth Live Feed</span>
+            </div>
+            <div class="family-stream-wrap" id="family-stream">
+              <div class="cheer-msg">
+                <img class="cheer-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBf3drIRR9u1Ao6F01u-XRF_lGNTACLK25df1Ve_v0T98_JyE8kpN0VJvJ8s2cYdmkrXKq4QMSKGbi25xiuYXqKs2k1k0AhG83WIjp7NGRYZRFDBipR6585MS1n9eI8lJGVtrDzEzc0XNTB75o7C_UdTuad5xD7bpAhigiDYASR5L3L7_zfTdfPGIpFZXq5uCOI4uDQ2sNDL-ijN3WyI6kw-IiSs-_rtye2OElnAaxp9VzOn5qJDgkH3g" alt="Tariq"/>
+                <div class="cheer-content">
+                  <span class="cheer-author">Tariq</span>
+                  <span class="cheer-body">Keep the foundation flat, family! The Nether lies ahead!</span>
+                </div>
+              </div>
+              <div class="cheer-msg">
+                <img class="cheer-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNC1ebBryzewR9eKSzvd2A4p5gryOHBI_S8cEr1mSBDXELum4mCJvnCxf8hHGOJDv20JXW-Eph4ULtJYQw7eb-sYJehTuwPXrsHO-zvu6FJXehyCb07JxSNI5G7LovOCiRHHoI94brI4k6LHP5pz5L1aCCJW1RbjZsYSy5N2sqwsHbp4PrhiJO3AEXfWr08PnVBHdMVSSyIVbN6uoMeMPrWhO5juvY10IQYP76sdA4cXrogabsoAQi2Q" alt="Liam"/>
+                <div class="cheer-content">
+                  <span class="cheer-author">Liam</span>
+                  <span class="cheer-body">Save a Tetris for the Ender Dragon, Dad! Let's beat the family record!</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="game-card">
+            <div class="card-title">
+              <span class="material-symbols-outlined" style="font-size: 18px;">leaderboard</span>
+              <span>Family Leaderboard</span>
+            </div>
+            <table class="leaderboard-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Champion</th>
+                  <th>Biome</th>
+                  <th>Score</th>
+                </tr>
+              </thead>
+              <tbody id="leaderboard-body">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <div class="craft-modal-backdrop" id="gameover-modal">
+    <div class="craft-modal">
+      <div class="modal-icon-badge">
+        <span class="material-symbols-outlined" style="font-size: 32px;">heart_broken</span>
+      </div>
+      <h2 class="modal-title">Expedition Concluded</h2>
+      <p class="modal-sub" id="gameover-sub">The voxel blocks reached the sky limit, but the Al-Rashid hearth stands proud!</p>
+      <div class="modal-stats-pill">
+        <div>
+          <span style="font-size: 0.75rem; color: var(--outline);">FINAL SCORE</span>
+          <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary);" id="modal-final-score">0</div>
+        </div>
+        <div>
+          <span style="font-size: 0.75rem; color: var(--outline);">BIOME REACHED</span>
+          <div style="font-size: 1.1rem; font-weight: 700;" id="modal-final-biome">Deepslate Caverns</div>
+        </div>
+        <div>
+          <span style="font-size: 0.75rem; color: var(--outline);">LINES CLEARED</span>
+          <div style="font-size: 1.2rem; font-weight: 700;" id="modal-final-lines">0</div>
+        </div>
+        <div>
+          <span style="font-size: 0.75rem; color: var(--outline);">CHAMPION</span>
+          <div style="font-size: 1.1rem; font-weight: 700;" id="modal-final-champ">Tariq</div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-craft-primary" id="modal-retry-btn" type="button">
+          <span class="material-symbols-outlined">restart_alt</span>
+          <span>Embark Again</span>
+        </button>
+        <button class="btn-craft-secondary" onclick="window.location.href='index.html#hub'" type="button">
+          <span>Return to Hub</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="craft-modal-backdrop" id="victory-modal">
+    <div class="craft-modal" style="border: 2px solid #ab47bc; box-shadow: 0 0 40px rgba(171, 71, 188, 0.4);">
+      <div class="modal-icon-badge" style="background: rgba(171, 71, 188, 0.2); color: #e1bee7;">
+        <span class="material-symbols-outlined" style="font-size: 36px; color: #ffd700;">emoji_events</span>
+      </div>
+      <h2 class="modal-title" style="color: #ba68c8;">THE END HAS BEEN CONQUERED!</h2>
+      <p class="modal-sub">
+        Jean the Ender Dragon has been vanquished! The Dragon Egg rests in the Al-Rashid hearth vault, earning an extra <strong>+5,000 XP Victory Points</strong>!
+      </p>
+      <div class="modal-stats-pill" style="border-color: #ab47bc;">
+        <div>
+          <span style="font-size: 0.75rem; color: var(--outline);">LEGENDARY SCORE</span>
+          <div style="font-size: 1.6rem; font-weight: 800; color: #ffd700;" id="victory-final-score">0</div>
+        </div>
+        <div>
+          <span style="font-size: 0.75rem; color: var(--outline);">TITLE CONFERRED</span>
+          <div style="font-size: 1.1rem; font-weight: 700; color: #e1bee7;">Dragon Slayer of Aqaarib</div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-craft-primary" id="victory-continue-btn" type="button" style="background: linear-gradient(135deg, #7b1fa2, #ba68c8);">
+          <span class="material-symbols-outlined">all_inclusive</span>
+          <span>Endless Slayer Mode</span>
+        </button>
+        <button class="btn-craft-secondary" id="victory-newgame-btn" type="button">
+          <span>New Expedition</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="craft-modal-backdrop" id="champion-modal">
+    <div class="craft-modal" style="max-width: 580px;">
+      <h2 class="modal-title">Choose Your Champion</h2>
+      <p class="modal-sub">Each member of the Al-Rashid family brings unique architectural and elemental gifts to the expedition.</p>
+      <div class="champ-picker-list" id="champ-picker-list">
+      </div>
+      <div class="modal-actions" style="margin-top: 0.5rem;">
+        <button class="btn-craft-primary" id="champ-confirm-btn" type="button">
+          <span>Confirm Champion</span>
+        </button>
+        <button class="btn-craft-secondary" id="champ-cancel-btn" type="button">
+          <span>Close</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop" id="profile-modal-backdrop" role="dialog" aria-modal="true" aria-label="Family Hearth Roster">
+    <div class="modal-sheet" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--surface-container); border: 1px solid var(--border-color); border-radius: 1.5rem; padding: 1.5rem; max-width: 420px; width: 90%; box-shadow: var(--dock-shadow); z-index: 1100;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+        <h3 style="font-size: 1.2rem; font-weight: 700;">Al-Rashid Hearth Roster</h3>
+        <button id="profile-modal-close" style="background: none; border: none; cursor: pointer; color: var(--outline);" type="button">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; border-radius: 0.75rem; background: var(--surface);">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBf3drIRR9u1Ao6F01u-XRF_lGNTACLK25df1Ve_v0T98_JyE8kpN0VJvJ8s2cYdmkrXKq4QMSKGbi25xiuYXqKs2k1k0AhG83WIjp7NGRYZRFDBipR6585MS1n9eI8lJGVtrDzEzc0XNTB75o7C_UdTuad5xD7bpAhigiDYASR5L3L7_zfTdfPGIpFZXq5uCOI4uDQ2sNDL-ijN3WyI6kw-IiSs-_rtye2OElnAaxp9VzOn5qJDgkH3g" style="width: 36px; height: 36px; border-radius: 9999px; object-fit: cover;" alt="Tariq"/>
+            <div><strong>Tariq</strong><p style="font-size: 11px; color: var(--outline);">The Architect • Stone Buff</p></div>
+          </div>
+          <span style="font-size: 10px; background: var(--primary-fixed); color: var(--on-primary-fixed); padding: 2px 8px; border-radius: 9999px;">Parent</span>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; border-radius: 0.75rem; background: var(--surface);">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeA_ZPiSUEHr2kWeks14JOMcoRNBPn2DaEmwt07zX-U1X6sLrIAWWmspZfBrv9G-YBaZEqNeT6Y_LF8wxf3gJSGIUPw8bOR12Jl4evrduhLZlhzrpylDt5Bf59CytEq8cn7ujVED8-0VmHCqy4LbJx4mMIRiX7kKXGakYCsBkqfTt-A6s4wh4XhFOeUFLmwczmvx12KUApM3izP5cS4kztUtspTT9_7m6pnb6CRMqWysCVGggiI5NYGA" style="width: 36px; height: 36px; border-radius: 9999px; object-fit: cover;" alt="Elena"/>
+            <div><strong>Elena</strong><p style="font-size: 11px; color: var(--outline);">The Hearthkeeper • Combo Boost</p></div>
+          </div>
+          <span style="font-size: 10px; background: var(--primary-fixed); color: var(--on-primary-fixed); padding: 2px 8px; border-radius: 9999px;">Parent</span>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; border-radius: 0.75rem; background: var(--surface);">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCunoiZJOk3-luigCSpKh4dSsP8rVhmYASPJsBmoc9ng65ZqpguPUbfS1p1RzI8aAoSwpdtBCG3rEOlVCvIxbzdTf4JqFDIcHHJYtJmfdzcWkf2AvM5ZcT8JCY-tOHH9CZEtXEgOTJEdxh80ysu9WOJFBlT1sCVtv7cumq6jAglLfCFH8JJmpXsamP1HNZnS3V6rh5x9H7WAzS9bj9nEWK9FmflWAgm8r88L-TgQS6zf0nYPSOe2zLiLQ" style="width: 36px; height: 36px; border-radius: 9999px; object-fit: cover;" alt="Maya"/>
+            <div><strong>Maya</strong><p style="font-size: 11px; color: var(--outline);">The Explorer • Diamond Lucky</p></div>
+          </div>
+          <span style="font-size: 10px; background: var(--secondary-container); color: var(--on-secondary-container); padding: 2px 8px; border-radius: 9999px;">Child</span>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; border-radius: 0.75rem; background: var(--surface);">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNC1ebBryzewR9eKSzvd2A4p5gryOHBI_S8cEr1mSBDXELum4mCJvnCxf8hHGOJDv20JXW-Eph4ULtJYQw7eb-sYJehTuwPXrsHO-zvu6FJXehyCb07JxSNI5G7LovOCiRHHoI94brI4k6LHP5pz5L1aCCJW1RbjZsYSy5N2sqwsHbp4PrhiJO3AEXfWr08PnVBHdMVSSyIVbN6uoMeMPrWhO5juvY10IQYP76sdA4cXrogabsoAQi2Q" style="width: 36px; height: 36px; border-radius: 9999px; object-fit: cover;" alt="Liam"/>
+            <div><strong>Liam</strong><p style="font-size: 11px; color: var(--outline);">The Redstone Engineer • Fast Drop</p></div>
+          </div>
+          <span style="font-size: 10px; background: var(--secondary-container); color: var(--on-secondary-container); padding: 2px 8px; border-radius: 9999px;">Child</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="toast-rack" id="toast-rack"></div>
+  <script src="js/tetris.js"></script>
+</body>
+</html>
