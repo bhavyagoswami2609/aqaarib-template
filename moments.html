@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aqaarib - Family Operating Hub</title>
+  <link rel="icon" type="image/png" href="Aqaarib Favicons/heart_lightmode.png" id="site-favicon"/>
+  <link rel="stylesheet" href="css/base.css"/>
+  <link rel="stylesheet" href="css/hero.css"/>
+  <link rel="stylesheet" href="css/hub.css"/>
+  <link rel="stylesheet" href="css/rhythm.css"/>
+  <link rel="stylesheet" href="css/moments.css"/>
+  <link rel="stylesheet" href="css/vault.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+</head>
+<body>
+  <canvas id="bg-canvas" class="bg-canvas"></canvas>
+
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="header-brand" id="brand-home-btn" role="button" tabindex="0" aria-label="Aqaarib Family Operating Hub Home">
+        <span class="material-symbols-outlined brand-icon" aria-hidden="true">all_inclusive</span>
+        <span class="brand-text">Aqaarib</span>
+        <span class="brand-badge"><span class="pulse-dot"></span>Hearth Active</span>
+      </div>
+
+      <nav class="nav-pill" role="navigation" aria-label="Main Navigation">
+        <button class="nav-item" data-view="hero" type="button">Hero</button>
+        <button class="nav-item" data-view="hub" type="button">Hub</button>
+        <button class="nav-item" data-view="rhythm" type="button">Rhythm</button>
+        <button class="nav-item active" data-view="moments" type="button">Moments</button>
+        <button class="nav-item" data-view="vault" type="button">Vault</button>
+      </nav>
+
+      <div class="header-actions">
+        <button class="search-trigger" id="search-trigger-btn" type="button" title="Quick Command Palette" aria-label="Quick Command Palette (Command K)">
+          <span class="material-symbols-outlined" style="font-size: 16px;" aria-hidden="true">search</span>
+          <span>Cmd K</span>
+        </button>
+        <button class="icon-btn" id="theme-toggle-btn" type="button" title="Toggle Appearance" aria-label="Toggle light or dark appearance">
+          <span class="material-symbols-outlined" aria-hidden="true">bedtime</span>
+        </button>
+        <div class="profile-avatar-wrap" id="profile-avatar-btn" role="button" tabindex="0" title="Hearth Roster" aria-label="Family Hearth Roster">
+          <img class="profile-avatar light-icon" src="Aqaarib Favicons/user_lightmode.png" alt="User Account"/>
+          <img class="profile-avatar dark-icon" src="Aqaarib Favicons/user_darkmode.png" alt="User Account"/>
+          <span class="profile-status"></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <section class="view-section" id="view-hero">
+      <div class="hero-wrap">
+        <div class="hero-section">
+          <div class="hero-presence-strip">
+            <div class="presence-sync-pill">
+              <span class="ping-indicator">
+                <span class="ping-ring"></span>
+                <span class="ping-dot"></span>
+              </span>
+              <span class="presence-text">All 4 family members in sync</span>
+              <span class="presence-divider">•</span>
+              <span class="presence-weather">
+                <span class="material-symbols-outlined">wb_sunny</span>
+                Abu Dhabi, UAE <span id="live-weather-temp">28°C</span>
+              </span>
+            </div>
+
+            <div class="hearth-cluster">
+              <div class="hearth-avatars">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBf3drIRR9u1Ao6F01u-XRF_lGNTACLK25df1Ve_v0T98_JyE8kpN0VJvJ8s2cYdmkrXKq4QMSKGbi25xiuYXqKs2k1k0AhG83WIjp7NGRYZRFDBipR6585MS1n9eI8lJGVtrDzEzc0XNTB75o7C_UdTuad5xD7bpAhigiDYASR5L3L7_zfTdfPGIpFZXq5uCOI4uDQ2sNDL-ijN3WyI6kw-IiSs-_rtye2OElnAaxp9VzOn5qJDgkH3g" alt="Tariq"/>
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeA_ZPiSUEHr2kWeks14JOMcoRNBPn2DaEmwt07zX-U1X6sLrIAWWmspZfBrv9G-YBaZEqNeT6Y_LF8wxf3gJSGIUPw8bOR12Jl4evrduhLZlhzrpylDt5Bf59CytEq8cn7ujVED8-0VmHCqy4LbJx4mMIRiX7kKXGakYCsBkqfTt-A6s4wh4XhFOeUFLmwczmvx12KUApM3izP5cS4kztUtspTT9_7m6pnb6CRMqWysCVGggiI5NYGA" alt="Elena"/>
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCunoiZJOk3-luigCSpKh4dSsP8rVhmYASPJsBmoc9ng65ZqpguPUbfS1p1RzI8aAoSwpdtBCG3rEOlVCvIxbzdTf4JqFDIcHHJYtJmfdzcWkf2AvM5ZcT8JCY-tOHH9CZEtXEgOTJEdxh80ysu9WOJFBlT1sCVtv7cumq6jAglLfCFH8JJmpXsamP1HNZnS3V6rh5x9H7WAzS9bj9nEWK9FmflWAgm8r88L-TgQS6zf0nYPSOe2zLiLQ" alt="Maya"/>
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNC1ebBryzewR9eKSzvd2A4p5gryOHBI_S8cEr1mSBDXELum4mCJvnCxf8hHGOJDv20JXW-Eph4ULtJYQw7eb-sYJehTuwPXrsHO-zvu6FJXehyCb07JxSNI5G7LovOCiRHHoI94brI4k6LHP5pz5L1aCCJW1RbjZsYSy5N2sqwsHbp4PrhiJO3AEXfWr08PnVBHdMVSSyIVbN6uoMeMPrWhO5juvY10IQYP76sdA4cXrogabsoAQi2Q" alt="Liam"/>
+              </div>
+              <span class="hearth-title">The Al-Rashid Hearth</span>
+            </div>
+          </div>
+
+          <div class="hero-editorial">
+            <div class="overline-marker">
+              <span class="material-symbols-outlined">favorite</span>
+              <span>The Domestic Operating Canvas • Vol. IV Active</span>
+            </div>
+
+            <h1 class="hero-headline">
+              Where family life <span class="wavy-accent">finds its rhythm.</span>
+            </h1>
+
+            <p class="hero-subhead">
+              A tactile domestic hearth synthesizing shared household coordination, living memory streams, and gentle presence pings without the persistent friction of modern productivity tools.
+            </p>
+
+            <div class="hero-actions">
+              <button class="btn-primary" data-jump="hub" type="button">
+                <span>Enter Household Canvas</span>
+                <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
+              </button>
+              <button class="btn-secondary" id="hero-quick-ping-btn" type="button">
+                <span class="material-symbols-outlined text-primary" style="font-size: 18px;">notifications_active</span>
+                <span>Quick Ping</span>
+              </button>
+            </div>
+
+            <div class="hero-pulse-pills">
+              <div class="pulse-pill-item sec">
+                <span class="material-symbols-outlined">check_circle</span>
+                <span>3 morning syncs complete</span>
+              </div>
+              <span class="presence-divider">•</span>
+              <div class="pulse-pill-item ter">
+                <span class="material-symbols-outlined">local_dining</span>
+                <span>1 recipe pinned for dinner</span>
+              </div>
+              <span class="presence-divider">•</span>
+              <div class="pulse-pill-item pri">
+                <span class="material-symbols-outlined">auto_stories</span>
+                <span>Bedtime story queued</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-cards-grid">
+            <div class="hero-feature-card" data-jump="hub" role="button" tabindex="0">
+              <div class="feature-card-header">
+                <div class="feature-icon-box">
+                  <span class="material-symbols-outlined">hub</span>
+                </div>
+                <span class="material-symbols-outlined text-outline" style="font-size: 18px;">north_east</span>
+              </div>
+              <h2 class="feature-card-title">The Living Hearth</h2>
+              <p class="feature-card-desc">Floating interactive memos, automated polaroid memory shuffling, and domestic chore rosters.</p>
+              <span class="feature-card-tag">Launch Hub <span class="material-symbols-outlined" style="font-size: 14px;">arrow_forward</span></span>
+            </div>
+
+            <div class="hero-feature-card" data-jump="rhythm" role="button" tabindex="0">
+              <div class="feature-card-header">
+                <div class="feature-icon-box">
+                  <span class="material-symbols-outlined">all_inclusive</span>
+                </div>
+                <span class="material-symbols-outlined text-outline" style="font-size: 18px;">north_east</span>
+              </div>
+              <h2 class="feature-card-title">Solar Arc Cadence</h2>
+              <p class="feature-card-desc">2D upright solar orbit with collision bounces, grocery baskets, and culinary recipe drawers.</p>
+              <span class="feature-card-tag">View Cadence <span class="material-symbols-outlined" style="font-size: 14px;">arrow_forward</span></span>
+            </div>
+
+            <div class="hero-feature-card" data-jump="moments" role="button" tabindex="0">
+              <div class="feature-card-header">
+                <div class="feature-icon-box">
+                  <span class="material-symbols-outlined">auto_stories</span>
+                </div>
+                <span class="material-symbols-outlined text-outline" style="font-size: 18px;">north_east</span>
+              </div>
+              <h2 class="feature-card-title">Temporal Resonances</h2>
+              <p class="feature-card-desc">Harmonic wave timeline, oral history audio recordings, geographic cartography, and daily quotes.</p>
+              <span class="feature-card-tag">Explore Timeline <span class="material-symbols-outlined" style="font-size: 14px;">arrow_forward</span></span>
+            </div>
+
+            <div class="hero-feature-card" data-jump="vault" role="button" tabindex="0">
+              <div class="feature-card-header">
+                <div class="feature-icon-box">
+                  <span class="material-symbols-outlined">shield_locked</span>
+                </div>
+                <span class="material-symbols-outlined text-outline" style="font-size: 18px;">north_east</span>
+              </div>
+              <h2 class="feature-card-title">Cypher Vault</h2>
+              <p class="feature-card-desc">Concentric kinetic cypher lock, decentralized zero-knowledge mesh, and heirloom archive.</p>
+              <span class="feature-card-tag">Access Vault <span class="material-symbols-outlined" style="font-size: 14px;">arrow_forward</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view-section" id="view-hub">
+      <div class="hub-container">
+        <div class="hub-top-bar">
+          <div class="hub-title-block">
+            <span class="hub-supertitle">Family Operating Center</span>
+            <h1 class="hub-maintitle">Domestic Operating Canvas</h1>
+          </div>
+
+          <div class="hub-status-cluster">
+            <div class="clock-badge">
+              <span class="material-symbols-outlined">schedule</span>
+              <span id="live-gst-clock">14:32 GST (Abu Dhabi)</span>
+            </div>
+            <button class="btn-secondary" id="beacon-sync-btn" type="button" style="padding: 0.4rem 0.9rem; font-size: 12px;">
+              <span class="material-symbols-outlined text-primary" style="font-size: 16px;">wifi_tethering</span>
+              <span>Sync Beacon</span>
+            </button>
+            <div class="members-presence-row">
+              <div class="member-presence-chip"><span class="member-presence-dot"></span>Tariq</div>
+              <div class="member-presence-chip"><span class="member-presence-dot"></span>Elena</div>
+              <div class="member-presence-chip"><span class="member-presence-dot"></span>Maya</div>
+              <div class="member-presence-chip"><span class="member-presence-dot"></span>Liam</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hub-hero-grid">
+          <div class="memo-sandbox-card">
+            <div class="memo-card-header">
+              <div>
+                <h2 class="memo-card-title">Living Memos</h2>
+                <span style="font-size: 12px; color: var(--on-surface-variant);">Interactive floating notes • Drag to rearrange</span>
+              </div>
+              <button class="btn-primary" id="add-memo-btn" type="button" style="padding: 0.45rem 1rem; font-size: 12px;">
+                <span class="material-symbols-outlined" style="font-size: 16px;">add</span>
+                <span>Add Note</span>
+              </button>
+            </div>
+
+            <div class="memo-sandbox" id="memo-sandbox"></div>
+          </div>
+
+          <div class="vault-memory-card" id="vault-memory-card">
+            <div class="vault-card-header">
+              <div>
+                <h2 class="memo-card-title">The Vault Memories</h2>
+                <span style="font-size: 12px; color: var(--on-surface-variant);">Archived family polaroids • Auto-shuffling deck</span>
+              </div>
+              <button class="btn-secondary" id="vault-shuffle-manual" type="button" style="padding: 0.45rem 0.9rem; font-size: 12px;">
+                <span class="material-symbols-outlined text-primary" style="font-size: 16px;">shuffle</span>
+                <span>Shuffle</span>
+              </button>
+            </div>
+
+            <div class="polaroid-stage">
+              <div class="polaroid-stack-container" id="polaroid-stack-container">
+                <div class="polaroid-slot" data-index="0">
+                  <img class="polaroid-photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFhc9VRxAljce0A9Hwd9b-MljwAFmQKUfgLqr-DPGxIlIZrO0VFm2lQn3D6F9XtyhjELtuQr0lDkdpyuYGJdAXXpy4RzXjKN6rXrml1VisMcTu5K0W30JQWeBZ7DoZVbXyEtkfdi-bl8R6jEDr6uLU8phgRx-qBTxWUlAupVoOvLjpBuQIncfsIT5SSFr2vYKUJg9qR836TzJkbYyoObZDHiv0LYBV0DkFeM7t3ii9lGfe3y1hqoHgPw" alt="Desert Camp"/>
+                  <div class="polaroid-caption">Liwa Desert Dunes Night</div>
+                  <div class="polaroid-date">Dec 2024 • Family Camp</div>
+                </div>
+                <div class="polaroid-slot" data-index="1">
+                  <img class="polaroid-photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdSXEoWBlrhSg_ncWN9HBWE8pPVzCc5AHM86wAZiiS8e5GHO0R1bEbVdpqCVJBEu5bmpVfUMPpGjZVqzCnl7p1M8ChwEBOpWYU3Siw21LwxxbgRs9TKLUEFJuMvEi_PRNwnUu_i-LC5P7MeA5VrFN4QskQbrNAWWAuFe_WaAg8azQGaZuf6JNlvLYVAKUzEaBGtQyLo-jkkD1aLDuJDwoq7AZeDoCySBgLS-vFuEURyHNt2cYkCyVuaQ" alt="Kyoto Walk"/>
+                  <div class="polaroid-caption">Kyoto Bamboo Grove Walk</div>
+                  <div class="polaroid-date">Jul 2025 • Summer Journey</div>
+                </div>
+                <div class="polaroid-slot" data-index="2">
+                  <img class="polaroid-photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAraR3jZ_LhsY8kTeLKeKn2EoN8MUCOtYJAJ28rH6n4Vnsrte_DpX-EdUIjGjJ-MPYSd2obOcwMBpSfDUxVQgUdIFA7FfVlEDjSGJa--_skJWsEUYRIs3RB4izkB8nOj6c4vJDJMBtpSVThG6KqA0kz0RWQ6cvEkcOJM3EKz6JB1kG8ohjNgBhMVinaJ_-0Tpw5wVRPzIbCIXr6GivN7Bi9u3bfuXhWT-mCKZeJzkjTwm2o4z8ipF3O_g" alt="Balcony Morning"/>
+                  <div class="polaroid-caption">Balcony Tea &amp; Fresh Bread</div>
+                  <div class="polaroid-date">Oct 2025 • Weekend Hearth</div>
+                </div>
+                <div class="polaroid-slot" data-index="3">
+                  <img class="polaroid-photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKGgi6-CVXYnKkIS-BcuBMavNsz9ydFp5n7iDL1GxnAZSwZuCqaCqdprhdkw0O7YSNF5Olcr-N6l3-2JPQVNsM0XA5jUx0xoMUaWtpaKtrkKQUl0N8ug6b62_3MBJ8TDBjrAhWm7j6JI_pRuep33aj4wHhtiwu9vxTmC2sWi36ZVqJPuRh7GoySIfraWaIs10L4B_GGa1CGSVuylnNT_9yLeBZw6DQc5D9AHlg0AY8IR9hT658c7-IWg" alt="Beirut Kitchen"/>
+                  <div class="polaroid-caption">Grandma's 80th in Beirut</div>
+                  <div class="polaroid-date">Feb 2026 • Oral History</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="shuffle-footer">
+              <div class="shuffle-status-pill">
+                <span class="shuffle-dot" id="shuffle-dot"></span>
+                <span id="shuffle-status-text">Auto-Shuffling</span>
+              </div>
+              <button class="btn-secondary" data-jump="vault" type="button" style="padding: 0.35rem 0.85rem; font-size: 11px;">
+                <span>View All 182 Records</span>
+                <span class="material-symbols-outlined" style="font-size: 14px;">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="workspace-section">
+          <div class="workspace-nav">
+            <div class="workspace-tabs">
+              <button class="workspace-tab-btn active" data-tab="chores" type="button">Household Chores</button>
+              <button class="workspace-tab-btn" data-tab="roster" type="button">Hearth Roster</button>
+              <button class="workspace-tab-btn" data-tab="deposit" type="button">Drop Vault</button>
+            </div>
+
+            <button class="btn-primary" id="add-chore-btn" type="button" style="padding: 0.45rem 1rem; font-size: 12px;">
+              <span class="material-symbols-outlined" style="font-size: 16px;">add_task</span>
+              <span>Assign Chore</span>
+            </button>
+          </div>
+
+          <div class="workspace-pane active" id="pane-chores">
+            <div class="chore-grid" id="chore-list"></div>
+          </div>
+
+          <div class="workspace-pane" id="pane-roster">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+              <div class="card card-lowest" style="padding: 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBf3drIRR9u1Ao6F01u-XRF_lGNTACLK25df1Ve_v0T98_JyE8kpN0VJvJ8s2cYdmkrXKq4QMSKGbi25xiuYXqKs2k1k0AhG83WIjp7NGRYZRFDBipR6585MS1n9eI8lJGVtrDzEzc0XNTB75o7C_UdTuad5xD7bpAhigiDYASR5L3L7_zfTdfPGIpFZXq5uCOI4uDQ2sNDL-ijN3WyI6kw-IiSs-_rtye2OElnAaxp9VzOn5qJDgkH3g" style="width: 42px; height: 42px; border-radius: 9999px; object-fit: cover;" alt="Tariq"/>
+                <div><strong style="font-family: var(--font-serif); font-size: 14px;">Tariq Al-Rashid</strong><p style="font-size: 11px; color: var(--outline);">Father • Mina Market</p></div>
+              </div>
+              <div class="card card-lowest" style="padding: 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeA_ZPiSUEHr2kWeks14JOMcoRNBPn2DaEmwt07zX-U1X6sLrIAWWmspZfBrv9G-YBaZEqNeT6Y_LF8wxf3gJSGIUPw8bOR12Jl4evrduhLZlhzrpylDt5Bf59CytEq8cn7ujVED8-0VmHCqy4LbJx4mMIRiX7kKXGakYCsBkqfTt-A6s4wh4XhFOeUFLmwczmvx12KUApM3izP5cS4kztUtspTT9_7m6pnb6CRMqWysCVGggiI5NYGA" style="width: 42px; height: 42px; border-radius: 9999px; object-fit: cover;" alt="Elena"/>
+                <div><strong style="font-family: var(--font-serif); font-size: 14px;">Elena Al-Rashid</strong><p style="font-size: 11px; color: var(--outline);">Mother • Studio Atelier</p></div>
+              </div>
+              <div class="card card-lowest" style="padding: 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCunoiZJOk3-luigCSpKh4dSsP8rVhmYASPJsBmoc9ng65ZqpguPUbfS1p1RzI8aAoSwpdtBCG3rEOlVCvIxbzdTf4JqFDIcHHJYtJmfdzcWkf2AvM5ZcT8JCY-tOHH9CZEtXEgOTJEdxh80ysu9WOJFBlT1sCVtv7cumq6jAglLfCFH8JJmpXsamP1HNZnS3V6rh5x9H7WAzS9bj9nEWK9FmflWAgm8r88L-TgQS6zf0nYPSOe2zLiLQ" style="width: 42px; height: 42px; border-radius: 9999px; object-fit: cover;" alt="Maya"/>
+                <div><strong style="font-family: var(--font-serif); font-size: 14px;">Maya Al-Rashid</strong><p style="font-size: 11px; color: var(--outline);">Daughter • Al Bateen Acad.</p></div>
+              </div>
+              <div class="card card-lowest" style="padding: 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNC1ebBryzewR9eKSzvd2A4p5gryOHBI_S8cEr1mSBDXELum4mCJvnCxf8hHGOJDv20JXW-Eph4ULtJYQw7eb-sYJehTuwPXrsHO-zvu6FJXehyCb07JxSNI5G7LovOCiRHHoI94brI4k6LHP5pz5L1aCCJW1RbjZsYSy5N2sqwsHbp4PrhiJO3AEXfWr08PnVBHdMVSSyIVbN6uoMeMPrWhO5juvY10IQYP76sdA4cXrogabsoAQi2Q" style="width: 42px; height: 42px; border-radius: 9999px; object-fit: cover;" alt="Liam"/>
+                <div><strong style="font-family: var(--font-serif); font-size: 14px;">Liam Al-Rashid</strong><p style="font-size: 11px; color: var(--outline);">Son • Hearth Base</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="workspace-pane" id="pane-deposit">
+            <div class="drop-zone" id="hub-drop-zone">
+              <span class="material-symbols-outlined drop-zone-icon">cloud_upload</span>
+              <h3 class="drop-zone-text">Drop family records or polaroids here</h3>
+              <p class="drop-zone-subtext">Zero-knowledge local encryption automatically applied upon receipt</p>
+            </div>
+          </div>
+
+          <div class="reactions-cluster">
+            <span style="font-family: var(--font-label); font-size: 11px; font-weight: 700; color: var(--outline); text-transform: uppercase;">Quick Hearth Reactions:</span>
+            <button class="ping-reaction-btn" type="button">
+              <img src="Aqaarib Favicons/heart_lightmode.png" class="reaction-icon light-icon" alt="Heart"/>
+              <img src="Aqaarib Favicons/heart_darkmode.png" class="reaction-icon dark-icon" alt="Heart"/>
+              <span>Heart</span>
+              <span class="reaction-count">18</span>
+            </button>
+            <button class="ping-reaction-btn" type="button">
+              <img src="Aqaarib Favicons/sparkling_lightmode.png" class="reaction-icon light-icon" alt="Radiant"/>
+              <img src="Aqaarib Favicons/sparkling_darkmoe.png" class="reaction-icon dark-icon" alt="Radiant"/>
+              <span>Radiant</span>
+              <span class="reaction-count">12</span>
+            </button>
+            <button class="ping-reaction-btn" type="button">
+              <img src="Aqaarib Favicons/tea_lightmode.png" class="reaction-icon light-icon" alt="Warm Tea"/>
+              <img src="Aqaarib Favicons/tea_darkmode.png" class="reaction-icon dark-icon" alt="Warm Tea"/>
+              <span>Warm Tea</span>
+              <span class="reaction-count">9</span>
+            </button>
+            <button class="ping-reaction-btn" type="button">
+              <img src="Aqaarib Favicons/proud_lightmode.png" class="reaction-icon light-icon" alt="Proud"/>
+              <img src="Aqaarib Favicons/proud_darkmode.png" class="reaction-icon dark-icon" alt="Proud"/>
+              <span>Proud</span>
+              <span class="reaction-count">15</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view-section" id="view-rhythm">
+      <div class="rhythm-container">
+        <div class="rhythm-top-bar">
+          <div class="rhythm-header-row">
+            <div class="rhythm-title-block">
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span class="badge" style="background-color: var(--secondary-container); color: var(--on-secondary-container);">Synchrony Mesh Active</span>
+                <span style="font-family: var(--font-label); font-size: 11px; color: var(--outline); text-transform: uppercase;">• 04 Hearth Members In-Orbit</span>
+              </div>
+              <h1 class="rhythm-title">Household Rhythm &amp; Synchrony</h1>
+              <p class="rhythm-desc">Gentle daily cadences, culinary rhythms, and celestial hearth synchrony.</p>
+            </div>
+
+            <div class="rhythm-actions">
+              <div class="clock-badge">
+                <span class="material-symbols-outlined text-primary">calendar_today</span>
+                <span>Today, Oct 24</span>
+                <span style="opacity: 0.5;">/</span>
+                <span>Abu Dhabi, UAE</span>
+              </div>
+              <button class="btn-primary" id="add-checkpoint-btn" type="button">
+                <span class="material-symbols-outlined" style="font-size: 18px;">add_circle</span>
+                <span>Add Checkpoint</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="ping-banner" id="ping-status-banner"></div>
+
+        <div class="orbit-stage-card">
+          <div class="orbit-card-header">
+            <div>
+              <span class="badge" style="background-color: var(--primary-fixed); color: var(--on-primary-fixed); margin-bottom: 0.25rem;">Solar Arc Simulation</span>
+              <h2 class="orbit-card-title">Procedural Time-Loop &amp; Celestial Hearth Cycle</h2>
+              <p class="orbit-card-subtitle">Pills locked upright • Collision detection with elastic bounce and contact sparks • Click pill to reverse orbit</p>
+            </div>
+
+            <div class="telemetry-pills">
+              <div class="telemetry-pill" data-target-member="tariq">
+                <span style="width: 6px; height: 6px; border-radius: 9999px; background-color: var(--secondary);"></span>
+                <span>Tariq (Outer Track)</span>
+              </div>
+              <div class="telemetry-pill" data-target-member="maya">
+                <span style="width: 6px; height: 6px; border-radius: 9999px; background-color: var(--primary);"></span>
+                <span>Maya (Inner Track)</span>
+              </div>
+              <div class="telemetry-pill" data-target-member="liam">
+                <span style="width: 6px; height: 6px; border-radius: 9999px; background-color: #dda74f;"></span>
+                <span>Liam (Outer Track)</span>
+              </div>
+              <div class="telemetry-pill" data-target-member="elena">
+                <span style="width: 6px; height: 6px; border-radius: 9999px; background-color: #7c5400;"></span>
+                <span>Elena (Inner Track)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="orbit-stage" id="orbit-interactive-stage">
+            <svg class="orbit-track-svg" xmlns="http://www.w3.org/2000/svg">
+              <line stroke="rgba(138, 114, 108, 0.12)" stroke-dasharray="3 6" x1="0" x2="100%" y1="50%" y2="50%"></line>
+              <line stroke="rgba(138, 114, 108, 0.12)" stroke-dasharray="3 6" x1="50%" x2="50%" y1="0" y2="100%"></line>
+              <ellipse cx="50%" cy="50%" fill="none" rx="360" ry="145" stroke="rgba(138, 114, 108, 0.22)" stroke-dasharray="4 6" stroke-width="1.2"></ellipse>
+              <ellipse cx="50%" cy="50%" fill="none" rx="240" ry="95" stroke="rgba(158, 60, 38, 0.25)" stroke-dasharray="3 5" stroke-width="1.2"></ellipse>
+            </svg>
+
+            <div class="solar-center" id="solar-arc-center" title="Hearth Core">
+              <div class="solar-corona"></div>
+              <div class="solar-core">
+                <span class="solar-tag"><span style="width: 5px; height: 5px; border-radius: 9999px; background-color: var(--primary);"></span>Solar Arc</span>
+                <span class="solar-chrono">03:14</span>
+                <span class="solar-status">Golden Hour</span>
+              </div>
+            </div>
+
+            <div class="nodes-stage" id="nodes-orbit-stage">
+              <div class="orbit-node" id="orbit-node-tariq" title="Click to reverse direction • Drag to nudge">
+                <div class="orbit-pill-card">
+                  <div class="orbit-node-avatar tariq">T</div>
+                  <div class="orbit-node-info">
+                    <span class="orbit-node-name">Tariq (1.8 km)</span>
+                    <span class="orbit-node-desc">Mina Market • Transit</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="orbit-node" id="orbit-node-maya" title="Click to reverse direction • Drag to nudge">
+                <div class="orbit-pill-card">
+                  <div class="orbit-node-avatar maya">M</div>
+                  <div class="orbit-node-info">
+                    <span class="orbit-node-name">Maya</span>
+                    <span class="orbit-node-desc">Hearth Base • Balcony</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="orbit-node" id="orbit-node-liam" title="Click to reverse direction • Drag to nudge">
+                <div class="orbit-pill-card">
+                  <div class="orbit-node-avatar liam">L</div>
+                  <div class="orbit-node-info">
+                    <span class="orbit-node-name">Liam</span>
+                    <span class="orbit-node-desc">Art Atelier • Study</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="orbit-node" id="orbit-node-elena" title="Click to reverse direction • Drag to nudge">
+                <div class="orbit-pill-card">
+                  <div class="orbit-node-avatar elena">E</div>
+                  <div class="orbit-node-info">
+                    <span class="orbit-node-name">Elena (3.2 km)</span>
+                    <span class="orbit-node-desc">Al Bateen • Workshop</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="orbit-controls-bar">
+            <div class="orbit-ctrl-group">
+              <button class="icon-btn" id="orbit-pause-toggle" type="button" title="Play or Pause Orbit">
+                <span class="material-symbols-outlined" id="pause-icon">pause_circle</span>
+              </button>
+              <span style="font-family: var(--font-label); font-size: 12px; font-weight: 600;" id="orbit-status-label">Revolving</span>
+            </div>
+            <div class="orbit-ctrl-group">
+              <span class="chip" id="orbit-velocity-tag">1.0x mesh</span>
+              <span style="font-size: 11px; color: var(--outline);">Hover slows orbit • Click pills to bounce</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rhythm-dual-grid">
+          <div class="pantry-card">
+            <div class="pantry-header">
+              <div>
+                <h2 class="pantry-title">Pantry &amp; Hearth Basket</h2>
+                <span style="font-size: 12px; color: var(--on-surface-variant);">Saved in local storage</span>
+              </div>
+              <span class="pantry-counter" id="pantry-counter">5 items</span>
+            </div>
+
+            <div class="pantry-list" id="pantry-list-container"></div>
+
+            <form class="pantry-form" id="pantry-add-form">
+              <input class="pantry-input" id="pantry-input" type="text" placeholder="Add pantry provision or tea..."/>
+              <button class="btn-primary" type="submit" style="padding: 0.55rem 1rem; font-size: 12px;">Add</button>
+            </form>
+          </div>
+
+          <div class="recipe-drawer-card">
+            <div class="recipe-trigger-btn" id="recipe-trigger" role="button" tabindex="0">
+              <div>
+                <span class="badge" style="background-color: var(--tertiary-fixed); color: var(--on-tertiary-fixed); margin-bottom: 0.25rem;">Hearth Kitchen</span>
+                <h2 class="pantry-title">Grandmother's Saffron Cardamom Chai</h2>
+                <span style="font-size: 12px; color: var(--on-surface-variant);">Evening culinary rhythm • Tap to view recipe</span>
+              </div>
+              <span class="material-symbols-outlined text-primary" style="font-size: 24px;">restaurant_menu</span>
+            </div>
+
+            <div class="recipe-drawer" id="recipe-drawer">
+              <div class="recipe-ingredients">
+                <div class="recipe-ingredient-chip">4 Crushed Green Cardamom</div>
+                <div class="recipe-ingredient-chip">3 Saffron Threads</div>
+                <div class="recipe-ingredient-chip">2 Cups Oat Milk</div>
+                <div class="recipe-ingredient-chip">1 tbsp Raw Clover Honey</div>
+              </div>
+              <p class="recipe-steps">
+                Simmer crushed cardamom in one cup of spring water for 6 minutes. Add saffron threads and warm oat milk slowly without boiling. Strain into clay cups and stir honey gently.
+              </p>
+              <button class="btn-secondary" id="close-recipe-btn" type="button" style="padding: 0.35rem 0.85rem; font-size: 11px;">
+                <span>Close Recipe Drawer</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="broadcast-ping-row">
+          <div class="ping-card">
+            <div class="ping-card-icon"><span class="material-symbols-outlined">dinner_dining</span></div>
+            <div class="ping-card-info">
+              <span class="ping-card-title">Dinner in 15 Minutes</span>
+              <span class="ping-card-sub">Tap to notify all devices</span>
+            </div>
+          </div>
+
+          <div class="ping-card">
+            <div class="ping-card-icon"><span class="material-symbols-outlined">directions_car</span></div>
+            <div class="ping-card-info">
+              <span class="ping-card-title">School Pickup Needed</span>
+              <span class="ping-card-sub">Tap to broadcast school ping</span>
+            </div>
+          </div>
+
+          <div class="ping-card">
+            <div class="ping-card-icon"><span class="material-symbols-outlined">deck</span></div>
+            <div class="ping-card-info">
+              <span class="ping-card-title">Balcony Tea Ready</span>
+              <span class="ping-card-sub">Tap to call family to balcony</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view-section active" id="view-moments">
+      <div class="moments-container">
+        <div class="moments-top-bar">
+          <div class="moments-title-block">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span class="badge" style="background-color: var(--secondary-container); color: var(--on-secondary-container);">Continuous Stream</span>
+              <span style="font-family: var(--font-label); font-size: 11px; color: var(--outline); text-transform: uppercase;">• Heirloom Living Archive</span>
+            </div>
+            <h1 class="moments-title">Temporal Resonances &amp; Moments</h1>
+            <p class="moments-desc">Harmonic memories, oral history audio recordings, and family cartography.</p>
+          </div>
+
+          <div class="filter-chips-row">
+            <button class="filter-chip active" type="button">All Moments</button>
+            <button class="filter-chip" type="button">2024</button>
+            <button class="filter-chip" type="button">2025</button>
+            <button class="filter-chip" type="button">2026</button>
+            <button class="filter-chip" type="button">Audio Notes</button>
+            <button class="filter-chip" type="button">Polaroids</button>
+          </div>
+        </div>
+
+        <div class="kinetic-stage-card">
+          <div class="kinetic-header">
+            <div class="kinetic-title-group">
+              <span class="badge" style="background-color: var(--primary-fixed); color: var(--on-primary-fixed); margin-bottom: 0.25rem;">Kinetic Stream</span>
+              <h2 class="kinetic-title">Oscillating Memory Stream &amp; Undulating Timeline</h2>
+              <p class="kinetic-subtitle">Mathematical harmonic waves • Cursor perturbation • Click creates ripple shockwave affecting the wave</p>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <button class="icon-btn" id="stream-toggle-btn" type="button" title="Pause or Resume Stream">
+                <span class="material-symbols-outlined" id="stream-toggle-icon">motion_photos_on</span>
+              </button>
+              <span style="font-family: var(--font-label); font-size: 12px; font-weight: 600;" id="stream-status">Active Resonance</span>
+            </div>
+          </div>
+
+          <div class="kinetic-stage" id="kinetic-stage">
+            <canvas class="mesh-canvas" id="particle-mesh-canvas"></canvas>
+
+            <svg class="wave-ribbons-svg" viewBox="0 0 1200 400" preserveAspectRatio="none">
+              <path id="ribbon-glow" fill="none" stroke="rgba(245, 189, 98, 0.3)" stroke-width="8"></path>
+              <path id="ribbon-line-1" fill="none" stroke="rgba(190, 84, 60, 0.75)" stroke-width="2.2"></path>
+              <path id="ribbon-line-2" fill="none" stroke="rgba(245, 189, 98, 0.65)" stroke-width="1.8" stroke-dasharray="6 4"></path>
+              <path id="ribbon-line-3" fill="none" stroke="rgba(138, 154, 134, 0.6)" stroke-width="1.5"></path>
+            </svg>
+
+            <div class="cursor-glow" id="canvas-cursor-glow"></div>
+            <div class="shockwave-box" id="shockwave-box"></div>
+
+            <div class="timeline-nodes-wrap">
+              <div class="timeline-node-pill node-float-a" data-year="2024" style="left: 18%; top: 48%;">
+                <div class="node-pill-inner">
+                  <img class="node-pill-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFhc9VRxAljce0A9Hwd9b-MljwAFmQKUfgLqr-DPGxIlIZrO0VFm2lQn3D6F9XtyhjELtuQr0lDkdpyuYGJdAXXpy4RzXjKN6rXrml1VisMcTu5K0W30JQWeBZ7DoZVbXyEtkfdi-bl8R6jEDr6uLU8phgRx-qBTxWUlAupVoOvLjpBuQIncfsIT5SSFr2vYKUJg9qR836TzJkbYyoObZDHiv0LYBV0DkFeM7t3ii9lGfe3y1hqoHgPw" alt="2024"/>
+                  <div class="node-pill-info">
+                    <span class="node-pill-title">Desert Dune Night</span>
+                    <span class="node-pill-date">Dec 2024</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="timeline-node-pill node-float-b" data-year="2025" style="left: 48%; top: 52%;">
+                <div class="node-pill-inner">
+                  <img class="node-pill-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdSXEoWBlrhSg_ncWN9HBWE8pPVzCc5AHM86wAZiiS8e5GHO0R1bEbVdpqCVJBEu5bmpVfUMPpGjZVqzCnl7p1M8ChwEBOpWYU3Siw21LwxxbgRs9TKLUEFJuMvEi_PRNwnUu_i-LC5P7MeA5VrFN4QskQbrNAWWAuFe_WaAg8azQGaZuf6JNlvLYVAKUzEaBGtQyLo-jkkD1aLDuJDwoq7AZeDoCySBgLS-vFuEURyHNt2cYkCyVuaQ" alt="2025"/>
+                  <div class="node-pill-info">
+                    <span class="node-pill-title">Kyoto Bamboo Walk</span>
+                    <span class="node-pill-date">Jul 2025</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="timeline-node-pill node-float-c" data-year="2026" style="left: 78%; top: 45%;">
+                <div class="node-pill-inner">
+                  <img class="node-pill-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKGgi6-CVXYnKkIS-BcuBMavNsz9ydFp5n7iDL1GxnAZSwZuCqaCqdprhdkw0O7YSNF5Olcr-N6l3-2JPQVNsM0XA5jUx0xoMUaWtpaKtrkKQUl0N8ug6b62_3MBJ8TDBjrAhWm7j6JI_pRuep33aj4wHhtiwu9vxTmC2sWi36ZVqJPuRh7GoySIfraWaIs10L4B_GGa1CGSVuylnNT_9yLeBZw6DQc5D9AHlg0AY8IR9hT658c7-IWg" alt="2026"/>
+                  <div class="node-pill-info">
+                    <span class="node-pill-title">Grandma's 80th in Beirut</span>
+                    <span class="node-pill-date">Feb 2026</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="moments-grid-row">
+          <div class="audio-player-card">
+            <div class="audio-header">
+              <div class="audio-title-group">
+                <span class="badge" style="background-color: var(--secondary-container); color: var(--on-secondary-container); margin-bottom: 0.25rem;">Oral History Tape</span>
+                <h2 class="audio-title">Cardamom Fig Preserve Secrets</h2>
+                <span class="audio-narrator">Recorded by Elena with Grandma Amira • 1988 Recipe</span>
+              </div>
+              <span class="material-symbols-outlined text-primary" style="font-size: 26px;">graphic_eq</span>
+            </div>
+
+            <div class="audio-playback-row">
+              <button class="audio-play-btn" id="audio-play-btn" type="button" title="Play Recording">
+                <span class="material-symbols-outlined" id="play-icon" style="font-size: 28px;">play_arrow</span>
+              </button>
+
+              <div class="waveform-container" id="waveform-container" title="Click to seek">
+                <div class="waveform-bar active" style="height: 16px;"></div>
+                <div class="waveform-bar active" style="height: 24px;"></div>
+                <div class="waveform-bar active" style="height: 32px;"></div>
+                <div class="waveform-bar active" style="height: 18px;"></div>
+                <div class="waveform-bar active" style="height: 28px;"></div>
+                <div class="waveform-bar active" style="height: 36px;"></div>
+                <div class="waveform-bar active" style="height: 22px;"></div>
+                <div class="waveform-bar" style="height: 30px;"></div>
+                <div class="waveform-bar" style="height: 14px;"></div>
+                <div class="waveform-bar" style="height: 26px;"></div>
+                <div class="waveform-bar" style="height: 34px;"></div>
+                <div class="waveform-bar" style="height: 18px;"></div>
+                <div class="waveform-bar" style="height: 28px;"></div>
+                <div class="waveform-bar" style="height: 20px;"></div>
+              </div>
+
+              <span class="audio-time-label" id="audio-time">01:18 / 02:44</span>
+            </div>
+          </div>
+
+          <div class="quote-card">
+            <div class="quote-header">
+              <div class="quote-tag">
+                <span class="material-symbols-outlined" style="font-size: 16px;">format_quote</span>
+                <span>Words of the Hearth</span>
+              </div>
+              <button class="icon-btn" id="refresh-quote-btn" type="button" title="Fetch New Quote">
+                <span class="material-symbols-outlined" style="font-size: 16px;">refresh</span>
+              </button>
+            </div>
+
+            <div class="quote-body">
+              <p class="quote-text" id="hearth-quote-text">
+                "The hearth is not simply a hearth of fire, but a gathering of souls who keep one another warm."
+              </p>
+              <span class="quote-author" id="hearth-quote-author">Domestic Heirloom Record</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="map-card">
+          <div class="map-header">
+            <div>
+              <span class="badge" style="background-color: var(--secondary-container); color: var(--on-secondary-container); margin-bottom: 0.25rem;">Memory Cartography</span>
+              <h2 class="map-title">Geographic Footprint &amp; Hearth Origins</h2>
+              <span style="font-size: 12px; color: var(--on-surface-variant);">Interactive map of family origins • 8 Connected Roots</span>
+            </div>
+
+            <div class="city-chips-row">
+              <button class="city-chip active" data-city="Abu Dhabi" type="button">Abu Dhabi</button>
+              <button class="city-chip" data-city="Kyoto" type="button">Kyoto</button>
+              <button class="city-chip" data-city="Edinburgh" type="button">Edinburgh</button>
+              <button class="city-chip" data-city="Beirut" type="button">Beirut</button>
+              <button class="city-chip" data-city="Florence" type="button">Florence</button>
+            </div>
+          </div>
+
+          <div class="map-stage-container">
+            <div class="map-frame" id="memory-map-frame"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view-section" id="view-vault">
+      <div class="vault-container">
+        <div class="vault-top-bar">
+          <div class="vault-title-block">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span class="badge" style="background-color: var(--primary-fixed); color: var(--on-primary-fixed);">Cypher Mesh Active</span>
+              <span style="font-family: var(--font-label); font-size: 11px; color: var(--outline); text-transform: uppercase;">• 4096-bit Zero-Knowledge Enclave</span>
+            </div>
+            <h1 class="vault-title">The Vault &amp; Cryptographic Trust</h1>
+            <p class="vault-desc">Decentralized domestic security shield, procedural cryptography mesh, and protected family records.</p>
+          </div>
+
+          <div style="display: flex; gap: 0.75rem;">
+            <button class="btn-secondary" id="resync-mesh-btn" type="button">
+              <span class="material-symbols-outlined text-primary" style="font-size: 18px;">sync</span>
+              <span>Re-sync Mesh</span>
+            </button>
+            <button class="btn-primary" id="deposit-record-btn" type="button">
+              <span class="material-symbols-outlined" style="font-size: 18px;">add_moderator</span>
+              <span>Deposit Record</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="cypher-shield-card">
+          <div class="shield-split-layout">
+            <div class="cypher-visualizer-wrap">
+              <svg class="cypher-ring-svg animate-spin-slow-cw" id="cypherRingOuter" viewBox="0 0 320 320">
+                <circle cx="160" cy="160" fill="none" opacity="0.45" r="148" stroke="var(--primary)" stroke-dasharray="4 8" stroke-width="1.5"></circle>
+                <circle cx="160" cy="160" fill="none" opacity="0.3" r="130" stroke="var(--outline)" stroke-dasharray="1 12" stroke-width="1"></circle>
+                <text class="font-label-sm" fill="var(--outline)" font-size="9" text-anchor="middle" x="160" y="24">K-512 HARDENED SEED</text>
+                <text class="font-label-sm" fill="var(--outline)" font-size="9" text-anchor="middle" x="160" y="302">MULTI-PARTY ENCLAVE</text>
+              </svg>
+
+              <svg class="cypher-ring-svg animate-spin-slow-ccw" id="cypherRingMid" viewBox="0 0 320 320">
+                <circle cx="160" cy="160" fill="none" opacity="0.6" r="105" stroke="var(--tertiary)" stroke-dasharray="6 6" stroke-width="2"></circle>
+                <circle cx="160" cy="160" fill="none" opacity="0.35" r="88" stroke="var(--secondary)" stroke-dasharray="2 4" stroke-width="1"></circle>
+              </svg>
+
+              <div class="cypher-ring-svg animate-orbit-ring" id="orbitalRingGroup">
+                <div class="orbit-node-chip-a">
+                  <div class="animate-orbit-counter chip" style="font-size: 10px; padding: 0.15rem 0.5rem;">
+                    <span style="width: 5px; height: 5px; border-radius: 9999px; background-color: var(--secondary);"></span>
+                    Node α: OK
+                  </div>
+                </div>
+                <div class="orbit-node-chip-b">
+                  <div class="animate-orbit-counter chip" style="font-size: 10px; padding: 0.15rem 0.5rem;">
+                    <span style="width: 5px; height: 5px; border-radius: 9999px; background-color: var(--primary);"></span>
+                    Node β: OK
+                  </div>
+                </div>
+              </div>
+
+              <div class="vault-core-btn" id="vaultCoreButton" title="Tap to rotate cypher and toggle state">
+                <div class="vault-core-icon" id="coreIconContainer">
+                  <span class="material-symbols-outlined" id="lockIcon" style="font-size: 28px;">shield_locked</span>
+                </div>
+                <span class="vault-lock-text" id="lockStatusText">Armored</span>
+                <span class="vault-core-hint">Tap Cypher Core</span>
+              </div>
+            </div>
+
+            <div class="guardian-panel">
+              <div class="guardian-header">
+                <div>
+                  <h2 class="guardian-title">Hardware Vault Guardian State</h2>
+                  <p class="guardian-desc">Live decentralized state synchronized over domestic ultra-wideband mesh.</p>
+                </div>
+                <span class="badge" style="background-color: var(--secondary-container); color: var(--on-secondary-container);">Mesh Integrity 100%</span>
+              </div>
+
+              <div class="node-clusters-grid">
+                <div class="node-box">
+                  <div class="node-box-header">
+                    <span class="node-box-title">Node 01: Hearth</span>
+                    <span class="material-symbols-outlined text-primary" style="font-size: 18px;">router</span>
+                  </div>
+                  <span class="node-box-sub">Living Room Master Hub</span>
+                  <div class="node-box-status"><span class="pulse-dot"></span>Mirrored &amp; Online</div>
+                </div>
+
+                <div class="node-box">
+                  <div class="node-box-header">
+                    <span class="node-box-title">Node 02: Studio</span>
+                    <span class="material-symbols-outlined text-secondary" style="font-size: 18px;">memory</span>
+                  </div>
+                  <span class="node-box-sub">Ceramic Atelier Enclave</span>
+                  <div class="node-box-status"><span class="pulse-dot"></span>Mirrored &amp; Online</div>
+                </div>
+
+                <div class="node-box">
+                  <div class="node-box-header">
+                    <span class="node-box-title">Node 03: Cold Key</span>
+                    <span class="material-symbols-outlined text-tertiary" style="font-size: 18px;">key</span>
+                  </div>
+                  <span class="node-box-sub">Hardware Security Key</span>
+                  <div class="node-box-status"><span class="pulse-dot"></span>Encrypted Cold</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="archive-section">
+          <div class="archive-header">
+            <div>
+              <h2 class="archive-title">Encrypted Document Archive</h2>
+              <span style="font-size: 12px; color: var(--on-surface-variant);">Protected family heirlooms and essential documents</span>
+            </div>
+
+            <div class="filter-chips-row">
+              <button class="filter-chip archive-filter-tab active" data-filter="all" type="button">All Records</button>
+              <button class="filter-chip archive-filter-tab" data-filter="deeds" type="button">Deeds &amp; Leases</button>
+              <button class="filter-chip archive-filter-tab" data-filter="medical" type="button">Medical</button>
+              <button class="filter-chip archive-filter-tab" data-filter="wills" type="button">Heirloom Wills</button>
+              <button class="filter-chip archive-filter-tab" data-filter="diplomas" type="button">Diplomas</button>
+            </div>
+          </div>
+
+          <div class="archive-grid" id="archive-grid">
+            <div class="archive-item" data-category="deeds">
+              <div class="archive-item-top">
+                <div class="archive-icon"><span class="material-symbols-outlined">home</span></div>
+                <div class="archive-info">
+                  <span class="archive-item-title">Al Reem Residence Deed</span>
+                  <span class="archive-item-date">Updated 2024 • Verified Node 01</span>
+                </div>
+              </div>
+              <div class="archive-actions">
+                <span class="archive-badge">deeds</span>
+                <div style="display: flex; gap: 0.25rem;">
+                  <button class="icon-btn archive-preview-btn" type="button" title="Preview"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span></button>
+                  <button class="icon-btn archive-download-btn" type="button" title="Download"><span class="material-symbols-outlined" style="font-size: 16px;">download</span></button>
+                </div>
+              </div>
+            </div>
+
+            <div class="archive-item" data-category="medical">
+              <div class="archive-item-top">
+                <div class="archive-icon"><span class="material-symbols-outlined">vaccines</span></div>
+                <div class="archive-info">
+                  <span class="archive-item-title">Pediatric Health Passport</span>
+                  <span class="archive-item-date">Updated 2025 • Maya &amp; Liam</span>
+                </div>
+              </div>
+              <div class="archive-actions">
+                <span class="archive-badge">medical</span>
+                <div style="display: flex; gap: 0.25rem;">
+                  <button class="icon-btn archive-preview-btn" type="button" title="Preview"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span></button>
+                  <button class="icon-btn archive-download-btn" type="button" title="Download"><span class="material-symbols-outlined" style="font-size: 16px;">download</span></button>
+                </div>
+              </div>
+            </div>
+
+            <div class="archive-item" data-category="wills">
+              <div class="archive-item-top">
+                <div class="archive-icon"><span class="material-symbols-outlined">history_edu</span></div>
+                <div class="archive-info">
+                  <span class="archive-item-title">Family Heirloom Covenant</span>
+                  <span class="archive-item-date">Sealed 2023 • Triple Witness</span>
+                </div>
+              </div>
+              <div class="archive-actions">
+                <span class="archive-badge">wills</span>
+                <div style="display: flex; gap: 0.25rem;">
+                  <button class="icon-btn archive-preview-btn" type="button" title="Preview"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span></button>
+                  <button class="icon-btn archive-download-btn" type="button" title="Download"><span class="material-symbols-outlined" style="font-size: 16px;">download</span></button>
+                </div>
+              </div>
+            </div>
+
+            <div class="archive-item" data-category="diplomas">
+              <div class="archive-item-top">
+                <div class="archive-icon"><span class="material-symbols-outlined">school</span></div>
+                <div class="archive-info">
+                  <span class="archive-item-title">Fine Arts Masters Degree</span>
+                  <span class="archive-item-date">Elena Al-Rashid • Certified</span>
+                </div>
+              </div>
+              <div class="archive-actions">
+                <span class="archive-badge">diplomas</span>
+                <div style="display: flex; gap: 0.25rem;">
+                  <button class="icon-btn archive-preview-btn" type="button" title="Preview"><span class="material-symbols-outlined" style="font-size: 16px;">visibility</span></button>
+                  <button class="icon-btn archive-download-btn" type="button" title="Download"><span class="material-symbols-outlined" style="font-size: 16px;">download</span></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="add-memo-modal" role="dialog" aria-modal="true" aria-labelledby="add-memo-title">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="add-memo-title">Add Living Memo</h3>
+        <button class="modal-close" id="close-memo-modal" type="button" aria-label="Close memo modal"><span class="material-symbols-outlined">close</span></button>
+      </div>
+      <form id="add-memo-form">
+        <div class="form-group">
+          <label class="form-label" for="memo-author-select">Family Member</label>
+          <select class="form-select" id="memo-author-select">
+            <option value="Liam">Liam</option>
+            <option value="Elena">Elena</option>
+            <option value="Maya">Maya</option>
+            <option value="Tariq">Tariq</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="memo-text-input">Note Message</label>
+          <textarea class="form-textarea" id="memo-text-input" placeholder="Write a gentle note, reminder, or domestic thought..." required></textarea>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-primary" type="submit">Float to Sandbox</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="add-chore-modal" role="dialog" aria-modal="true" aria-labelledby="add-chore-title">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="add-chore-title">Assign Household Chore</h3>
+        <button class="modal-close" id="close-chore-modal" type="button" aria-label="Close chore modal"><span class="material-symbols-outlined">close</span></button>
+      </div>
+      <form id="add-chore-form">
+        <div class="form-group">
+          <label class="form-label" for="chore-title-input">Chore Description</label>
+          <input class="form-input" id="chore-title-input" type="text" placeholder="e.g. Prune garden herbs, organize shelf..." required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="chore-assignee-select">Assigned Member</label>
+          <select class="form-select" id="chore-assignee-select">
+            <option value="Tariq">Tariq</option>
+            <option value="Elena">Elena</option>
+            <option value="Maya">Maya</option>
+            <option value="Liam">Liam</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="chore-tag-select">Category Tone</label>
+          <select class="form-select" id="chore-tag-select">
+            <option value="sage">Sage (Garden / Health)</option>
+            <option value="amber">Amber (Household / Logistics)</option>
+            <option value="terracotta">Terracotta (Important / School)</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-primary" type="submit">Add to Roster</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="deposit-modal" role="dialog" aria-modal="true" aria-labelledby="deposit-modal-title">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="deposit-modal-title">Deposit Encrypted Record</h3>
+        <button class="modal-close" id="close-deposit-modal" type="button" aria-label="Close deposit modal"><span class="material-symbols-outlined">close</span></button>
+      </div>
+      <form id="deposit-form">
+        <div class="form-group">
+          <label class="form-label" for="record-title-input">Document Title</label>
+          <input class="form-input" id="record-title-input" type="text" placeholder="e.g. 2026 Vehicle Registration, Family Tree..." required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="record-category-select">Archive Category</label>
+          <select class="form-select" id="record-category-select">
+            <option value="deeds">Deeds &amp; Leases</option>
+            <option value="medical">Medical</option>
+            <option value="wills">Heirloom Wills</option>
+            <option value="diplomas">Diplomas</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-primary" type="submit">Encrypt &amp; Store</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="profile-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="profile-modal-title">The Al-Rashid Hearth Roster</h3>
+        <button class="modal-close" id="profile-modal-close" type="button" aria-label="Close roster modal"><span class="material-symbols-outlined">close</span></button>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; border-radius: 0.75rem; background: var(--surface-low); border: 1px solid var(--border-color);">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <img class="profile-avatar light-icon" src="Aqaarib Favicons/user_lightmode.png" style="width: 36px; height: 36px;" alt="Current User"/>
+            <img class="profile-avatar dark-icon" src="Aqaarib Favicons/user_darkmode.png" style="width: 36px; height: 36px;" alt="Current User"/>
+            <div><strong>Hearth Admin (You)</strong><p style="font-size: 11px; color: var(--secondary);">Active • Master Key Authorized</p></div>
+          </div>
+          <span class="chip" style="font-size: 10px;">Primary</span>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; border-radius: 0.75rem; background: var(--surface-container);">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBf3drIRR9u1Ao6F01u-XRF_lGNTACLK25df1Ve_v0T98_JyE8kpN0VJvJ8s2cYdmkrXKq4QMSKGbi25xiuYXqKs2k1k0AhG83WIjp7NGRYZRFDBipR6585MS1n9eI8lJGVtrDzEzc0XNTB75o7C_UdTuad5xD7bpAhigiDYASR5L3L7_zfTdfPGIpFZXq5uCOI4uDQ2sNDL-ijN3WyI6kw-IiSs-_rtye2OElnAaxp9VzOn5qJDgkH3g" style="width: 36px; height: 36px; border-radius: 9999px; object-fit: cover;" alt="Tariq"/>
+            <div><strong>Tariq</strong><p style="font-size: 11px; color: var(--outline);">Active • Mina Market</p></div>
+          </div>
+          <span class="chip" style="font-size: 10px;">Parent</span>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; border-radius: 0.75rem; background: var(--surface-container);">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeA_ZPiSUEHr2kWeks14JOMcoRNBPn2DaEmwt07zX-U1X6sLrIAWWmspZfBrv9G-YBaZEqNeT6Y_LF8wxf3gJSGIUPw8bOR12Jl4evrduhLZlhzrpylDt5Bf59CytEq8cn7ujVED8-0VmHCqy4LbJx4mMIRiX7kKXGakYCsBkqfTt-A6s4wh4XhFOeUFLmwczmvx12KUApM3izP5cS4kztUtspTT9_7m6pnb6CRMqWysCVGggiI5NYGA" style="width: 36px; height: 36px; border-radius: 9999px; object-fit: cover;" alt="Elena"/>
+            <div><strong>Elena</strong><p style="font-size: 11px; color: var(--outline);">Active • Studio</p></div>
+          </div>
+          <span class="chip" style="font-size: 10px;">Parent</span>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; border-radius: 0.75rem; background: var(--surface-container);">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCunoiZJOk3-luigCSpKh4dSsP8rVhmYASPJsBmoc9ng65ZqpguPUbfS1p1RzI8aAoSwpdtBCG3rEOlVCvIxbzdTf4JqFDIcHHJYtJmfdzcWkf2AvM5ZcT8JCY-tOHH9CZEtXEgOTJEdxh80ysu9WOJFBlT1sCVtv7cumq6jAglLfCFH8JJmpXsamP1HNZnS3V6rh5x9H7WAzS9bj9nEWK9FmflWAgm8r88L-TgQS6zf0nYPSOe2zLiLQ" style="width: 36px; height: 36px; border-radius: 9999px; object-fit: cover;" alt="Maya"/>
+            <div><strong>Maya</strong><p style="font-size: 11px; color: var(--outline);">Active • School</p></div>
+          </div>
+          <span class="chip" style="font-size: 10px;">Child</span>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; border-radius: 0.75rem; background: var(--surface-container);">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNC1ebBryzewR9eKSzvd2A4p5gryOHBI_S8cEr1mSBDXELum4mCJvnCxf8hHGOJDv20JXW-Eph4ULtJYQw7eb-sYJehTuwPXrsHO-zvu6FJXehyCb07JxSNI5G7LovOCiRHHoI94brI4k6LHP5pz5L1aCCJW1RbjZsYSy5N2sqwsHbp4PrhiJO3AEXfWr08PnVBHdMVSSyIVbN6uoMeMPrWhO5juvY10IQYP76sdA4cXrogabsoAQi2Q" style="width: 36px; height: 36px; border-radius: 9999px; object-fit: cover;" alt="Liam"/>
+            <div><strong>Liam</strong><p style="font-size: 11px; color: var(--outline);">Active • Home Base</p></div>
+          </div>
+          <span class="chip" style="font-size: 10px;">Child</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cmd-palette-backdrop" id="cmd-palette-backdrop" role="dialog" aria-modal="true" aria-label="Command Palette">
+    <div class="cmd-palette">
+      <div class="cmd-input-wrap">
+        <span class="material-symbols-outlined text-outline" aria-hidden="true">search</span>
+        <input class="cmd-input" id="cmd-input" type="text" placeholder="Type a destination or action..." aria-label="Type a destination or command"/>
+        <span class="chip" style="font-size: 10px;">ESC to close</span>
+      </div>
+      <div class="cmd-list" id="cmd-list" role="listbox"></div>
+    </div>
+  </div>
+
+  <div class="toast-rack" id="toast-rack"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/background.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/hero.js"></script>
+  <script src="js/hub.js"></script>
+  <script src="js/rhythm.js"></script>
+  <script src="js/moments.js"></script>
+  <script src="js/vault.js"></script>
+</body>
+</html>
