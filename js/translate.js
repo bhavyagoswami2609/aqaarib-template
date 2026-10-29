@@ -1275,9 +1275,6 @@
       }
     }
 
-    document.querySelectorAll('.rhythm-header-row .badge').forEach(function(el) {
-      el.textContent = dict.synchronyMeshActive;
-    });
     document.querySelectorAll('.rhythm-title').forEach(function(el) {
       el.textContent = dict.rhythmTitle;
     });
