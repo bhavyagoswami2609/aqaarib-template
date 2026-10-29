@@ -22,16 +22,21 @@
     } catch (e) {}
   }
 
+  let orbitInitialized = false;
+
   function initOrbit() {
+    if (orbitInitialized) return;
     const stage = document.getElementById('orbit-interactive-stage');
     const nodesStage = document.getElementById('nodes-orbit-stage');
     if (!stage || !nodesStage) return;
+    orbitInitialized = true;
 
     const nodes = {
       tariq: {
         el: document.getElementById('orbit-node-tariq'),
         rx: 360,
         ry: 145,
+        track: 'outer',
         angle: 3.4,
         speed: 0.0036,
         name: 'Tariq',
@@ -45,6 +50,7 @@
         el: document.getElementById('orbit-node-maya'),
         rx: 240,
         ry: 95,
+        track: 'inner',
         angle: 0.95,
         speed: 0.0052,
         name: 'Maya',
@@ -58,6 +64,7 @@
         el: document.getElementById('orbit-node-liam'),
         rx: 360,
         ry: 145,
+        track: 'outer',
         angle: 5.75,
         speed: 0.0039,
         name: 'Liam',
@@ -71,6 +78,7 @@
         el: document.getElementById('orbit-node-elena'),
         rx: 240,
         ry: 95,
+        track: 'inner',
         angle: 2.3,
         speed: 0.0048,
         name: 'Elena',
@@ -200,14 +208,30 @@
         for (let j = i + 1; j < keys.length; j++) {
           const a = nodes[keys[i]];
           const b = nodes[keys[j]];
+          if (a.track !== b.track) continue;
+
           const dx = a.x - b.x;
           const dy = a.y - b.y;
           const dist = Math.hypot(dx, dy);
 
           if (dist < 55) {
+            let dAngle = b.angle - a.angle;
+            while (dAngle > Math.PI) dAngle -= 2 * Math.PI;
+            while (dAngle < -Math.PI) dAngle += 2 * Math.PI;
+
+            const relSpeed = b.speed - a.speed;
+            const isConverging = (dAngle * relSpeed) < 0;
+            if (!isConverging) continue;
+
             lastCollisionTime = now;
-            a.speed = -a.speed;
-            b.speed = -b.speed;
+
+            if (dAngle > 0) {
+              a.speed = -Math.abs(a.speed);
+              b.speed = Math.abs(b.speed);
+            } else {
+              a.speed = Math.abs(a.speed);
+              b.speed = -Math.abs(b.speed);
+            }
 
             a.recoilScale = 1.18;
             b.recoilScale = 1.18;
